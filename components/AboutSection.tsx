@@ -1,91 +1,118 @@
-export default function AboutSection() {
-  // one place to tweak image heights
-  const imgHeights = "h-[220px] md:h-[300px] lg:h-[360px]"; // same for ALL image blocks
+import Link from "next/link";
 
+const rows = [
+  {
+    num: "01",
+    img: "/img9.JPG",
+    alt: "Wood interior detail",
+    heading: "Personalized Design",
+    body: "The use of beautiful wood and trees from the property adds authenticity, sustainability and a powerful story. Handcrafted pieces and natural wood accents makes the villas feel effortlessly stylish and grounded in nature.",
+  },
+  {
+    num: "02",
+    img: "/river3.jpg",
+    alt: "Crystal-clear river",
+    heading: "The Experience",
+    body: "The river access, views and sound create unique unforgettable moments of bliss, relaxation and fun.",
+  },
+  {
+    num: "03",
+    img: "/river2.jpg",
+    alt: "Aerial view of the estate",
+    heading: "Location",
+    body: "The villas are nestled in the hills of St Mary on the property known as the Warwick Castle Estate through which the Rio Nuevo runs.",
+  },
+];
+
+export default function AboutSection() {
   return (
-    <section id="about" className="bg-white py-24 px-4 lg:px-8">
-      <div className="mx-auto max-w-7xl">
-        {/* Header */}
-        <div className="mb-20 text-center">
-          <p className="text-xs tracking-[0.3em] text-gray-500 mb-6 uppercase">
-            ABOUT
+    <>
+    <section id="about" className="bg-[#F5F1E8] pt-24 pb-32 px-6 lg:px-16">
+      <div className="mx-auto max-w-6xl">
+        {/* Heading */}
+        <h2
+          className="text-5xl md:text-7xl lg:text-8xl text-gray-900 leading-[1.05] tracking-tight mb-16"
+          style={{ fontVariant: "small-caps", fontFamily: "var(--font-serif), serif" }}
+        >
+          Pon Di Rio, St. Mary,
+          <br />
+          Jamaica
+        </h2>
+
+        {/* 2-column intro text */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-20 gap-y-8 mb-24">
+          <div className="text-gray-600 text-base leading-relaxed space-y-6">
+            <p>
+              Pon Di Rios River Villas offers a serene blend of luxury and
+              nature, with each villa featuring bright bedrooms with plush beds,
+              vaulted ceilings, and hardwood furnishings.
+            </p>
+            <p>
+              Guests can enjoy private open-air rainfall showers with
+              river-inspired finishes, then unwind on the spacious riverside deck
+              shaded by trees and surrounded by lush greenery.
+            </p>
+          </div>
+          <p className="text-gray-600 text-base leading-relaxed md:mt-0">
+            Just steps away, the crystal-clear river&mdash; complete with
+            shallow and deeper areas for wading or swimming&mdash; creates a
+            secluded natural sanctuary perfect for relaxation, meditation,
+            photography, or simply embracing the peaceful beauty of
+            Jamaica&apos;s outdoors.
           </p>
-          <h2 className="text-5xl md:text-6xl lg:text-7xl text-gray-900 leading-tight max-w-4xl mx-auto">
-            Villas Nestled in Nature
-          </h2>
         </div>
 
-        {/* 12-col staggered grid */}
-        <div className="grid grid-cols-12 gap-x-8 gap-y-20 lg:gap-y-24">
-          {/* Col 1 */}
-          <div className="col-span-12 sm:col-span-6 lg:col-span-3">
-            <div className={`mb-8 overflow-hidden rounded-[20px] ring-1 ring-black/5 shadow-sm ${imgHeights}`}>
-              <img
-                src="/img9.JPG"
-                alt="Luxury interior"
-                className="h-full w-full object-cover transition-transform duration-700 hover:scale-[1.035]"
-                loading="lazy"
-              />
-            </div>
-            <h3 className="text-2xl text-gray-900">Personalized Design</h3>
-            <p className="mt-2 max-w-[48ch] text-gray-600">
-              The villas are comfort focused with warm and inviting spaces that prioritize relaxation and coziness with effortless flow between the indoors and the outdoors. 
-            </p>
-          </div>
+        {/* Numbered rows */}
+        <div className="flex flex-col">
+          {rows.map((row) => (
+            <div key={row.num} className="border-t border-gray-300 py-14 md:py-20">
+              <div className="grid grid-cols-1 md:grid-cols-[60px_280px_1fr] gap-6 md:gap-10 items-start">
+                {/* Number */}
+                <span className="text-sm text-gray-400 pt-2">{row.num}.</span>
 
-          {/* Col 2 (image first on mobile, text under it; stagger on lg) */}
-          <div className="col-span-12 sm:col-span-6 lg:col-span-3 lg:translate-y-12 flex flex-col">
-            <div className={`order-1 lg:order-2 overflow-hidden rounded-[20px] ring-1 ring-black/5 shadow-sm ${imgHeights}`}>
-              <img
-                src="/img8.JPG"
-                alt="Modern beach house"
-                className="h-full w-full object-cover transition-transform duration-700 hover:scale-[1.035]"
-                loading="lazy"
-              />
-            </div>
-            <div className="order-2 lg:order-1 mt-6 lg:mt-8">
-              <h3 className="text-2xl text-gray-900">Personalized Design</h3>
-              <p className="mt-2 max-w-[48ch] text-gray-600">
-                The use of  beautiful wood and trees from the property adds authenticity , sustainability and a powerful story. Handcrafted pieces and natural wood accents makes the villas feel effortlessly stylish and grounded in nature. 
-              </p>
-            </div>
-          </div>
+                {/* Image — square */}
+                <div className="w-full h-[220px] md:h-[240px] overflow-hidden rounded-sm">
+                  <img
+                    src={row.img}
+                    alt={row.alt}
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
 
-          {/* Col 3 */}
-          <div className="col-span-12 sm:col-span-6 lg:col-span-3">
-            <div className={`mb-8 overflow-hidden rounded-[20px] ring-1 ring-black/5 shadow-sm ${imgHeights}`}>
-              <img
-                src="/river3.jpg"
-                alt="Luxury exterior"
-                className="h-full w-full object-cover transition-transform duration-700 hover:scale-[1.035]"
-                loading="lazy"
-              />
+                {/* Text */}
+                <div>
+                  <h3
+                    className="text-4xl md:text-5xl lg:text-6xl text-gray-900 leading-tight mb-4"
+                    style={{ fontVariant: "small-caps", fontFamily: "var(--font-serif), serif" }}
+                  >
+                    {row.heading}
+                  </h3>
+                  <p className="text-gray-500 text-base leading-relaxed max-w-xl">
+                    {row.body}
+                  </p>
+                </div>
+              </div>
             </div>
-            <h3 className="text-2xl text-gray-900">The Experience</h3>
-            <p className="mt-2 max-w-[48ch] text-gray-600">
-              The river access, views and sound create unique unforgettable moments of bliss, relaxation and fun.
-            </p>
-          </div>
-
-          {/* Col 4 (image first on mobile, text under it; stagger on lg) */}
-          <div className="col-span-12 sm:col-span-6 lg:col-span-3 lg:translate-y-12 flex flex-col">
-            <div className={`order-1 lg:order-2 overflow-hidden rounded-[20px] ring-1 ring-black/5 shadow-sm ${imgHeights}`}>
-              <img
-                src="/river2.jpg"
-                alt="Infinity pool at sunset"
-                className="h-full w-full object-cover transition-transform duration-700 hover:scale-[1.035]"
-                loading="lazy"
-              />
-            </div>
-            <div className="order-2 lg:order-1 mt-6 lg:mt-8">
-              <h3 className="text-2xl text-gray-900">Location</h3>
-              <p className="mt-2 max-w-[48ch] text-gray-600">
-                The villas are nestled  in the hills of St Mary on the property known as the Warwick Castle Estate through which the Rio Nuevo runs. 
-              </p>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
+
+    {/* Transition river image — overlaps both sections */}
+    <div className="relative pb-[60px] md:pb-[80px]" style={{ backgroundColor: "#c8d5c3" }}>
+      {/* Beige overlay covers just the top portion behind the image */}
+      <div className="absolute inset-x-0 top-0 h-[75%] bg-[#F5F1E8]" />
+
+      <div className="relative mx-auto max-w-6xl px-6 lg:px-16 -mt-2">
+        <img
+          src="/img13.JPG"
+          alt="Outdoor deck and gazebo at Pon Di Rio"
+          className="w-full h-[50vh] md:h-[65vh] object-cover shadow-[0_20px_60px_rgba(0,0,0,0.08)]"
+          loading="lazy"
+        />
+      </div>
+    </div>
+    </>
   );
 }

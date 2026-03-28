@@ -36,18 +36,15 @@ function VillaImageSlider({
 
   return (
     <div className="relative h-full w-full">
-      {/* Current image */}
       <img
         src={safeImages[index]}
         alt={alt}
         loading="lazy"
-        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.035]"
+        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
       />
 
-      {/* Controls only if there are multiple images */}
       {safeImages.length > 1 && (
         <>
-          {/* Left / Right buttons */}
           <button
             onClick={prev}
             aria-label="Previous photo"
@@ -64,7 +61,6 @@ function VillaImageSlider({
             ›
           </button>
 
-          {/* Dots */}
           <div className="absolute bottom-3 left-0 right-0 flex items-center justify-center gap-2">
             {safeImages.map((_, i) => (
               <button
@@ -93,7 +89,7 @@ export default function OurCabinsSection() {
       bedrooms: 2,
       bathrooms: 2,
       guests: 4,
-      images: ["/img8.JPG","/img15.JPG", "/img9.JPG", "/img19.JPG", "/img10.JPG","/img12.JPG", "/img20.JPG","/img13.JPG","/img14.JPG","/img17.JPG", "/img18.JPG","/img6.JPG"], 
+      images: ["/img8.JPG"],
       alt: "Palm Villa at Pon Di Rio",
     },
     {
@@ -104,94 +100,168 @@ export default function OurCabinsSection() {
       bedrooms: 2,
       bathrooms: 2,
       guests: 4,
-      images: ["/logotransparent.png"], 
+      images: ["/bamboo-villa-cover.jpg"],
       alt: "Bamboo Villa at Pon Di Rio",
-      comingSoon: true,
     },
-    {
-      id: 2,
-      title: "Bamboo Villa",
-      price: 390,
-      minNights: 2,
-      bedrooms: 2,
-      bathrooms: 1,
-      guests: 4,
-      images: ["/logotransparent.png"], 
-      alt: "Bamboo Villa at Pon Di Rio",
-      comingSoon: true,
-    },
-    
   ];
 
-  const money = (n: number) =>
-    n.toLocaleString(undefined, {
-      style: "currency",
-      currency: "USD",
-      maximumFractionDigits: 0,
-    });
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const goTo = (direction: "prev" | "next") => {
+    setActiveIndex((cur) =>
+      direction === "next"
+        ? (cur + 1) % cabins.length
+        : (cur - 1 + cabins.length) % cabins.length
+    );
+  };
+
+  const active = cabins[activeIndex];
 
   return (
-    <section id="villas" className="py-24 px-4 lg:px-8 bg-gray-50">
+    <section
+      id="villas"
+      className="pt-0 pb-24 px-4 lg:px-8"
+      style={{ backgroundColor: "#c8d5c3" }}
+    >
       <div className="mx-auto max-w-7xl">
-        {/* Header */}
-        <div className="mb-20 text-center">
-          <p className="text-xs tracking-[0.3em] text-gray-500 mb-6 uppercase">
-            PON DI RIO
-          </p>
-          <h2 className="text-5xl md:text-6xl lg:text-7xl text-gray-900 leading-tight max-w-4xl mx-auto">
+        {/* Header row */}
+        <div className="mb-16 pt-4 flex items-end justify-between">
+          <h2
+            className="text-5xl md:text-6xl lg:text-7xl text-gray-900 leading-tight"
+            style={{ fontVariant: "small-caps", fontFamily: "var(--font-serif), serif" }}
+          >
             Our Villas
           </h2>
+
+          {/* Carousel navigation arrows */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => goTo("prev")}
+              aria-label="Previous villa"
+              className="flex h-12 w-12 items-center justify-center rounded-full bg-white/50 text-gray-900 hover:bg-white transition"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+            </button>
+            <button
+              onClick={() => goTo("next")}
+              aria-label="Next villa"
+              className="flex h-12 w-12 items-center justify-center rounded-full bg-white/50 text-gray-900 hover:bg-white transition"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M9 18l6-6-6-6" />
+              </svg>
+            </button>
+          </div>
         </div>
 
-        {/* 2x2 grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
-          {cabins.map((c) => (
-            <article key={c.id} className="group">
-              {/* Image wrapper */}
-              <div className="relative mb-6 overflow-hidden rounded-[20px] shadow-sm ring-1 ring-black/5">
-                <div className="aspect-[16/9]">
+        {/* Stacked card carousel */}
+        <div className="relative w-full overflow-hidden" style={{ height: "clamp(350px, 50vw, 600px)" }}>
+          {cabins.map((c, i) => {
+            const offset = i - activeIndex;
+            const isActive = offset === 0;
+            const isVisible = Math.abs(offset) <= 1;
+
+            if (!isVisible) return null;
+
+            return (
+              <div
+                key={c.id}
+                className="absolute top-0 left-1/2 w-[80%] md:w-[70%] lg:w-[65%] h-full"
+                style={{
+                  transform: `translateX(calc(-50% + ${offset * 40}%)) scale(${isActive ? 1 : 0.88})`,
+                  opacity: isActive ? 1 : 0.5,
+                  zIndex: isActive ? 30 : 10,
+                  transition: "transform 700ms ease-out, opacity 700ms ease-out",
+                  pointerEvents: isActive ? "auto" : "none",
+                }}
+              >
+                <div
+                  className={`group relative h-full overflow-hidden ${
+                    isActive ? "shadow-2xl" : ""
+                  }`}
+                >
                   <VillaImageSlider images={c.images} alt={c.alt} />
-                </div>
 
-                {/* Coming soon overlay (does NOT block slider clicks) */}
-                {c.comingSoon && (
-                  <div className="absolute inset-0 pointer-events-none flex items-center justify-center bg-black/60 text-white text-lg font-medium">
-                    Coming Soon
-                  </div>
-                )}
-              </div>
-
-              {/* Title & price */}
-              <div className="flex items-center justify-between">
-                <h3 className="text-2xl text-gray-900">{c.title}</h3>
-                <div className="text-2xl text-gray-900 ml-4 shrink-0">
-                  {money(c.price)}
                 </div>
               </div>
+            );
+          })}
+        </div>
 
-              {/* Minimum nights */}
-              {c.minNights && (
-                <p className="mt-1 text-sm text-gray-500">
-                  Minimum {c.minNights} night{c.minNights > 1 ? "s" : ""}
+        {/* Active villa info — synced to carousel */}
+        <div className="mt-12 px-2">
+          {/* Title + Price row */}
+          <div className="flex items-start justify-between mb-2">
+            <div>
+              <h3
+                className="text-3xl md:text-4xl lg:text-5xl text-gray-900"
+                style={{
+                  fontVariant: "small-caps",
+                  fontFamily: "var(--font-serif), serif",
+                }}
+              >
+                {active.title}
+              </h3>
+              {active.minNights && (
+                <p className="mt-2 text-base text-gray-600">
+                  Minimum {active.minNights} night
+                  {active.minNights > 1 ? "s" : ""}
                 </p>
               )}
+            </div>
+            <div className="text-right shrink-0 ml-4">
+              <span
+                className="text-4xl md:text-5xl lg:text-6xl text-gray-900"
+                style={{ fontFamily: "var(--font-serif), serif" }}
+              >
+                ${active.price}
+              </span>
+              <p className="text-base text-gray-600">per night</p>
+            </div>
+          </div>
 
+          {/* Specs */}
+          <div className="mt-6 text-base text-gray-700 flex items-center gap-8">
+            <span>{active.bedrooms} Bedrooms</span>
+            <span>{active.bathrooms} Bathrooms</span>
+            <span>{active.guests} Guests</span>
+          </div>
 
-              {/* Details */}
-              <div className="mt-4 border-t border-gray-200 pt-4 text-sm text-gray-600 flex items-center gap-6">
-                <span>{c.bedrooms} Bedrooms</span>
-                <span className="h-4 w-px bg-gray-200" />
-                <span>{c.bathrooms} Bathrooms</span>
-
-                {"guests" in c && c.guests ? (
-                  <>
-                    <span className="h-4 w-px bg-gray-200" />
-                    <span>{c.guests} Guests</span>
-                  </>
-                ) : null}
-              </div>
-            </article>
-          ))}
+          {/* Buttons */}
+          <div className="mt-10 flex gap-4">
+            <a
+              href={`/villas/${active.id}`}
+              className="flex-1 text-center py-4 rounded-lg border border-gray-900 bg-white text-gray-900 font-medium hover:bg-gray-900 hover:text-white transition"
+            >
+              View Details
+            </a>
+            <a
+              href="/booking"
+              className="flex-1 text-center py-4 rounded-lg bg-amber-600 text-white font-medium hover:bg-amber-700 transition"
+            >
+              Book Now
+            </a>
+          </div>
         </div>
       </div>
     </section>
