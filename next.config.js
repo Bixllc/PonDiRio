@@ -2,7 +2,6 @@
 const nextConfig = {
   reactStrictMode: true,
   experimental: {
-    appDir: true,
     serverComponentsExternalPackages: ["@prisma/adapter-neon", "@neondatabase/serverless", "node-ical"],
   },
   webpack: (config) => {

@@ -1,5 +1,5 @@
 // app/layout.tsx
-import "../styles/globals.css";
+import "./globals.css";
 import { Inter, Cinzel } from "next/font/google";
 
 const inter = Inter({
