@@ -4,14 +4,30 @@ import { prisma } from "@/lib/prisma";
 export async function GET(request: NextRequest) {
   const villaId = request.nextUrl.searchParams.get("id");
 
-  if (!villaId) {
-    return NextResponse.json(
-      { success: false, error: "Missing required param: id" },
-      { status: 400 },
-    );
-  }
-
   try {
+    // If no id provided, return all active villas
+    if (!villaId) {
+      const villas = await prisma.villa.findMany({
+        where: { isActive: true },
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          pricePerNight: true,
+          maxGuests: true,
+        },
+        orderBy: { name: "asc" },
+      });
+
+      return NextResponse.json({
+        success: true,
+        data: villas.map((v) => ({
+          ...v,
+          pricePerNight: v.pricePerNight.toString(),
+        })),
+      });
+    }
+
     const villa = await prisma.villa.findUnique({
       where: { id: villaId },
       select: {

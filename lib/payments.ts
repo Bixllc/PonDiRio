@@ -1,6 +1,7 @@
 import { randomUUID } from "crypto";
 import { prisma } from "./prisma";
 import { BookingStatus } from "@/app/generated/prisma/client";
+import { sendBookingConfirmation } from "./email";
 
 // ISO 4217 numeric currency codes
 const CURRENCY_CODES: Record<string, string> = {
@@ -244,6 +245,9 @@ export async function verifyFacCallback(
 
   // Payment succeeded — confirm booking, block dates, update payment record
   await confirmBooking(bookingId, result.TransactionIdentifier);
+
+  // Fire-and-forget: don't let email failure block the booking response
+  sendBookingConfirmation(bookingId).catch(() => {});
 
   return { success: true, bookingId };
 }

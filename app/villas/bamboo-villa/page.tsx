@@ -93,7 +93,7 @@ export default function BambooVillaPage() {
               <hr className="my-8 border-[#1a2332]/15" />
 
               <a
-                href="/booking"
+                href="/booking?villa=bamboo-villa"
                 className="block w-full text-center py-4 rounded-lg bg-amber-600 text-white text-base font-medium shadow-lg hover:bg-amber-700 transition-all"
               >
                 Book Now
@@ -194,7 +194,7 @@ export default function BambooVillaPage() {
             Book your stay and discover the perfect blend of luxury and natural beauty.
           </p>
           <a
-            href="/booking"
+            href="/booking?villa=bamboo-villa"
             className="mt-10 inline-block px-12 py-4 bg-amber-600 text-white text-base font-medium rounded-lg shadow-lg hover:bg-amber-700 transition-all"
           >
             Book Now

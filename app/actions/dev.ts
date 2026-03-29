@@ -1,6 +1,7 @@
 "use server";
 
 import { confirmBooking } from "@/lib/payments";
+import { sendBookingConfirmation } from "@/lib/email";
 
 export async function devConfirmPayment(bookingId: string) {
   if (process.env.NODE_ENV !== "development") {
@@ -9,6 +10,7 @@ export async function devConfirmPayment(bookingId: string) {
 
   try {
     await confirmBooking(bookingId, `dev-mock-${Date.now()}`);
+    sendBookingConfirmation(bookingId).catch(() => {});
     return { success: true };
   } catch (err) {
     return {

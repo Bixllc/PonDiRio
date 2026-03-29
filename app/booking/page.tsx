@@ -3,16 +3,23 @@
 import { useState, useEffect, useRef, useCallback, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { useSearchParams, useRouter } from "next/navigation";
-import { User, Mail, Phone, Users } from "lucide-react";
+import { User, Mail, Phone, Users, Home } from "lucide-react";
 import { initiateBookingPayment } from "@/app/actions/booking";
 import { DayPicker, DateRange } from "react-day-picker";
 import { format, addMonths, eachDayOfInterval, startOfDay, differenceInCalendarDays, parseISO } from "date-fns";
 import "react-day-picker/style.css";
 
-const VILLA_ID = "cmn854tso0000ck3p78a7zy4x";
 const CLEANING_FEE = 75;
 const SERVICE_FEE = 50;
 const MINIMUM_NIGHTS = 2;
+
+type Villa = {
+  id: string;
+  name: string;
+  slug: string;
+  pricePerNight: string;
+  maxGuests: number;
+};
 
 type BookingFormData = {
   firstName: string;
@@ -22,6 +29,7 @@ type BookingFormData = {
   checkIn: string;
   checkOut: string;
   guests: string;
+  villa: string;
   specialRequests?: string;
 };
 
@@ -49,6 +57,7 @@ function BookingPageContent() {
       checkIn: searchParams.get("checkIn") || "",
       checkOut: searchParams.get("checkOut") || "",
       guests: searchParams.get("guests") || "2",
+      villa: "",
     },
   });
 
@@ -57,6 +66,10 @@ function BookingPageContent() {
   const [pricePerNight, setPricePerNight] = useState<number | null>(null);
   const [showFacRedirect, setShowFacRedirect] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
+
+  // Villa state
+  const [villas, setVillas] = useState<Villa[]>([]);
+  const [selectedVilla, setSelectedVilla] = useState<Villa | null>(null);
 
   // Calendar state
   const [blockedDays, setBlockedDays] = useState<Date[]>([]);
@@ -77,9 +90,31 @@ function BookingPageContent() {
     return () => mq.removeEventListener("change", update);
   }, []);
 
-  // Fetch blocked ranges on mount
+  // Fetch villa list on mount, auto-select if slug provided
   useEffect(() => {
-    fetch(`/api/availability/blocked?villaId=${VILLA_ID}`)
+    fetch("/api/villas")
+      .then((r) => r.json())
+      .then((json) => {
+        if (!json.success) return;
+        const list = json.data as Villa[];
+        setVillas(list);
+        const villaSlug = searchParams.get("villa");
+        if (villaSlug) {
+          const match = list.find((v) => v.slug === villaSlug);
+          if (match) {
+            setSelectedVilla(match);
+            setValue("villa", match.id);
+          }
+        }
+      })
+      .catch(() => {});
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Fetch blocked ranges when villa changes
+  useEffect(() => {
+    setBlockedDays([]);
+    if (!selectedVilla) return;
+    fetch(`/api/availability/blocked?villaId=${selectedVilla.id}`)
       .then((r) => r.json())
       .then((json) => {
         if (!json.success) return;
@@ -94,7 +129,7 @@ function BookingPageContent() {
         setBlockedDays(days);
       })
       .catch(() => {});
-  }, []);
+  }, [selectedVilla]);
 
   // Handle range selection
   const handleRangeSelect = useCallback(
@@ -133,15 +168,14 @@ function BookingPageContent() {
   const checkIn = watch("checkIn");
   const checkOut = watch("checkOut");
 
-  // Fetch villa price on mount
+  // Update price when villa changes
   useEffect(() => {
-    fetch(`/api/villas?id=${VILLA_ID}`)
-      .then((r) => r.json())
-      .then((json) => {
-        if (json.success) setPricePerNight(parseFloat(json.data.pricePerNight));
-      })
-      .catch(() => {});
-  }, []);
+    if (selectedVilla) {
+      setPricePerNight(parseFloat(selectedVilla.pricePerNight));
+    } else {
+      setPricePerNight(null);
+    }
+  }, [selectedVilla]);
 
   // Calculate nights and totals
   const nights =
@@ -158,10 +192,10 @@ function BookingPageContent() {
   const stayTotal = pricePerNight && nights > 0 ? pricePerNight * nights : null;
   const grandTotal = stayTotal !== null ? stayTotal + CLEANING_FEE + SERVICE_FEE : null;
 
-  // Check availability when dates change
+  // Check availability when dates or villa change
   useEffect(() => {
     setAvailability({ state: "idle" });
-    if (!checkIn || !checkOut) return;
+    if (!checkIn || !checkOut || !selectedVilla) return;
 
     const inDate = new Date(checkIn);
     const outDate = new Date(checkOut);
@@ -185,7 +219,7 @@ function BookingPageContent() {
     (async () => {
       try {
         const res = await fetch(
-          `/api/availability?villaId=${VILLA_ID}&checkIn=${checkIn}&checkOut=${checkOut}`,
+          `/api/availability?villaId=${selectedVilla.id}&checkIn=${checkIn}&checkOut=${checkOut}`,
           { signal: controller.signal },
         );
         const json = await res.json();
@@ -207,7 +241,7 @@ function BookingPageContent() {
     })();
 
     return () => controller.abort();
-  }, [checkIn, checkOut]);
+  }, [checkIn, checkOut, selectedVilla]);
 
   const onSubmit = async (data: BookingFormData) => {
     setSubmitError("");
@@ -222,7 +256,7 @@ function BookingPageContent() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        villaId: VILLA_ID,
+        villaId: selectedVilla!.id,
         guestName: `${data.firstName} ${data.lastName}`,
         guestEmail: data.email,
         guestPhone: data.phone,
@@ -521,6 +555,37 @@ function BookingPageContent() {
               )}
             </div>
 
+            {/* Villa */}
+            <div className="mt-5 space-y-1.5">
+              <label className="text-sm font-medium text-[#1a1a2e]">
+                Villa <span className="text-[#C8940A]">*</span>
+              </label>
+              <div className="relative">
+                <Home className={iconCls} />
+                <select
+                  {...register("villa", { required: "Please select a villa" })}
+                  onChange={(e) => {
+                    const villa = villas.find((v) => v.id === e.target.value) || null;
+                    setSelectedVilla(villa);
+                    setValue("villa", e.target.value, { shouldValidate: true });
+                    // Reset dates when villa changes
+                    handleRangeSelect(undefined);
+                  }}
+                  className={`${inputCls} appearance-none`}
+                >
+                  <option value="">Select a villa</option>
+                  {villas.map((v) => (
+                    <option key={v.id} value={v.id}>
+                      {v.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {errors.villa && (
+                <p className="text-xs text-red-500">{errors.villa.message}</p>
+              )}
+            </div>
+
             {/* Availability feedback */}
             <div className="mt-4 h-5">
               {availability.state === "checking" && (
@@ -580,10 +645,10 @@ function BookingPageContent() {
             <h3
               className={`font-serif text-xl text-[#1a1a2e]`}
             >
-              Palm Villa
+              {selectedVilla ? selectedVilla.name : "Select a Villa"}
             </h3>
             <p className="mb-5 text-sm text-gray-500">
-              Riverside luxury villa with private deck
+              {selectedVilla ? "Riverside luxury villa with private deck" : "Choose your villa to see pricing"}
             </p>
 
             <hr className="mb-5 border-gray-100" />
@@ -633,6 +698,7 @@ function BookingPageContent() {
               type="submit"
               disabled={
                 isSubmitting ||
+                !selectedVilla ||
                 availability.state === "unavailable" ||
                 availability.state === "checking"
               }

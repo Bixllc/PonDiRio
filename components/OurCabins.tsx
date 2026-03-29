@@ -258,7 +258,7 @@ export default function OurCabinsSection() {
               View Details
             </a>
             <a
-              href="/booking"
+              href={`/booking?villa=${active.slug}`}
               className="flex-1 text-center py-4 rounded-lg bg-amber-600 text-white font-medium hover:bg-amber-700 transition"
             >
               Book Now
