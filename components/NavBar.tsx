@@ -95,7 +95,7 @@ export default function Navbar() {
         </div>
 
         <a
-          href="/#contact"
+          href="/contact"
           className={`transition-colors text-sm tracking-wide ${
             shouldShowScrolledStyle
               ? "text-gray-700 hover:text-gray-900"
