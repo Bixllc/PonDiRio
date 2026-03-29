@@ -83,6 +83,7 @@ export default function OurCabinsSection() {
   const cabins = [
     {
       id: 1,
+      slug: "palm-villa",
       title: "Palm Villa",
       price: 390,
       minNights: 2,
@@ -94,6 +95,7 @@ export default function OurCabinsSection() {
     },
     {
       id: 2,
+      slug: "bamboo-villa",
       title: "Bamboo Villa",
       price: 390,
       minNights: 2,
@@ -250,7 +252,7 @@ export default function OurCabinsSection() {
           {/* Buttons */}
           <div className="mt-10 flex gap-4">
             <a
-              href={`/villas/${active.id}`}
+              href={`/villas/${active.slug}`}
               className="flex-1 text-center py-4 rounded-lg border border-gray-900 bg-white text-gray-900 font-medium hover:bg-gray-900 hover:text-white transition"
             >
               View Details

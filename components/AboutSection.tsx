@@ -34,9 +34,9 @@ export default function AboutSection() {
           className="text-5xl md:text-7xl lg:text-8xl text-gray-900 leading-[1.05] tracking-tight mb-16"
           style={{ fontVariant: "small-caps", fontFamily: "var(--font-serif), serif" }}
         >
-          Pon Di Rio, St. Mary,
+          Pon Di Rio,
           <br />
-          Jamaica
+          St. Mary, Jamaica
         </h2>
 
         {/* 2-column intro text */}

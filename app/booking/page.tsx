@@ -476,7 +476,7 @@ function BookingPageContent() {
             {/* Villa image */}
             <div className="mb-4 overflow-hidden rounded-xl">
               <img
-                src="/1.png"
+                src="/booking-river.jpg"
                 alt="Palm Villa"
                 className="aspect-[4/3] w-full object-cover"
               />
