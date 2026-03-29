@@ -3,41 +3,46 @@ import { ChevronDown } from "lucide-react";
 const faqs = [
   {
     q: "Can you accommodate special requests?",
-    a: "Yes. From chef services and dietary needs to celebrations and excursions, we’ll coordinate every detail to your specifications.",
+    a: "Yes. From chef services and dietary needs to celebrations and excursions, we'll coordinate every detail to your specifications.",
   },
   {
     q: "What is your cancellation policy?",
-    a: "Policies vary by property and season. We’ll outline the exact terms before you confirm; flexible options are available on request.",
+    a: "Policies vary by property and season. We'll outline the exact terms before you confirm; flexible options are available on request.",
   },
 ];
 
 export default function FAQSection() {
   return (
-    <section id="faq" className="bg-white py-24 px-4 lg:px-8">
-      <div className="mx-auto max-w-3xl">
-        <div className="mb-12 text-center">
-          <p className="mb-6 text-xs uppercase tracking-[0.3em] text-gray-500">FAQ</p>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl leading-[1.05] text-gray-900">
-            Frequently Asked Questions
-          </h2>
-        </div>
+    <section id="faq" className="bg-[#F5F1E8] py-24 px-6 lg:px-16">
+      <div className="mx-auto max-w-6xl">
+        <h2
+          className="text-5xl md:text-7xl lg:text-8xl text-gray-900 leading-[1.05] tracking-tight mb-16"
+          style={{ fontVariant: "small-caps", fontFamily: "var(--font-serif), serif" }}
+        >
+          Frequently Asked
+          <br />
+          Questions
+        </h2>
 
-        <div className="space-y-4">
+        <div>
           {faqs.map((item, i) => (
             <details
               key={i}
-              className="group rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-colors open:bg-gray-50"
+              className="group border-b border-gray-300 py-6"
             >
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
-                <h3 className="text-base md:text-lg font-medium text-gray-900">
+                <h3
+                  className="text-xl md:text-2xl text-gray-900"
+                  style={{ fontVariant: "small-caps", fontFamily: "var(--font-serif), serif" }}
+                >
                   {item.q}
                 </h3>
-                <span className="shrink-0 rounded-full border border-gray-200 p-1 transition-transform group-open:rotate-180">
-                  <ChevronDown className="h-5 w-5 text-gray-700" />
+                <span className="shrink-0 transition-transform group-open:rotate-180">
+                  <ChevronDown className="h-5 w-5 text-gray-500" />
                 </span>
               </summary>
 
-              <div className="mt-3 text-sm md:text-base leading-relaxed text-gray-600">
+              <div className="mt-4 text-base leading-relaxed text-gray-600 max-w-3xl">
                 {item.a}
               </div>
             </details>
