@@ -1,7 +1,7 @@
 import { Resend } from "resend";
 import { prisma } from "./prisma";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+export const resend = new Resend(process.env.RESEND_API_KEY);
 
 const FROM_ADDRESS = "Pon Di Rio <onboarding@resend.dev>";
 
@@ -127,6 +127,109 @@ export async function sendBookingConfirmation(
     return { success: true };
   } catch (err) {
     console.error("[email] Failed to send confirmation:", err);
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : "Unknown error",
+    };
+  }
+}
+
+// ─── Contact Message ──────────────────────────────────────
+
+interface ContactMessageInput {
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+}
+
+export async function sendContactMessage(
+  input: ContactMessageInput,
+): Promise<SendResult> {
+  try {
+    const html = `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8" /></head>
+<body style="margin:0;padding:0;background-color:#F5F1E8;font-family:Georgia,'Times New Roman',serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#F5F1E8;padding:40px 20px;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:8px;overflow:hidden;">
+
+        <!-- Header -->
+        <tr>
+          <td style="background-color:#1a1a2e;padding:32px 40px;text-align:center;">
+            <h1 style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:28px;color:#C8940A;font-weight:normal;letter-spacing:1px;">
+              Pon Di Rio
+            </h1>
+          </td>
+        </tr>
+
+        <!-- Body -->
+        <tr>
+          <td style="padding:40px;">
+            <h2 style="margin:0 0 8px;font-family:Georgia,'Times New Roman',serif;font-size:22px;color:#1a1a2e;font-weight:normal;">
+              New Contact Message
+            </h2>
+            <div style="width:40px;height:2px;background-color:#C8940A;margin-bottom:24px;"></div>
+
+            <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#F5F1E8;border-radius:6px;margin-bottom:24px;">
+              <tr><td style="padding:24px;">
+                <table width="100%" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td style="padding:0 0 12px;font-size:13px;color:#888;text-transform:uppercase;letter-spacing:1px;">Name</td>
+                    <td style="padding:0 0 12px;font-size:15px;color:#1a1a2e;text-align:right;">${input.name}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:12px 0;font-size:13px;color:#888;text-transform:uppercase;letter-spacing:1px;border-top:1px solid #e0dcd4;">Email</td>
+                    <td style="padding:12px 0;font-size:15px;color:#1a1a2e;text-align:right;">
+                      <a href="mailto:${input.email}" style="color:#C8940A;">${input.email}</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:12px 0;font-size:13px;color:#888;text-transform:uppercase;letter-spacing:1px;border-top:1px solid #e0dcd4;">Phone</td>
+                    <td style="padding:12px 0;font-size:15px;color:#1a1a2e;text-align:right;">${input.phone}</td>
+                  </tr>
+                </table>
+              </td></tr>
+            </table>
+
+            <h3 style="margin:0 0 12px;font-family:Georgia,'Times New Roman',serif;font-size:16px;color:#1a1a2e;font-weight:normal;">Message</h3>
+            <p style="margin:0;font-size:15px;color:#444;line-height:1.6;white-space:pre-wrap;">${input.message}</p>
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td style="background-color:#1a1a2e;padding:24px 40px;text-align:center;">
+            <p style="margin:0;font-size:13px;color:#888;">
+              &copy; ${new Date().getFullYear()} Pon Di Rio &middot; St. Mary, Jamaica
+            </p>
+          </td>
+        </tr>
+
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`.trim();
+
+    const { error } = await resend.emails.send({
+      from: FROM_ADDRESS,
+      to: "info@pondirio.com",
+      replyTo: input.email,
+      subject: `Contact from ${input.name}`,
+      html,
+    });
+
+    if (error) {
+      console.error("[email] Failed to send contact message:", error);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true };
+  } catch (err) {
+    console.error("[email] Failed to send contact message:", err);
     return {
       success: false,
       error: err instanceof Error ? err.message : "Unknown error",

@@ -1,45 +1,22 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Mail, Phone, MapPin, Clock, Send } from "lucide-react";
-import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Label } from "./ui/label";
-// If you installed sonner, uncomment this:
-// import { toast } from "sonner";
-
-const VILLA_ID = "cmn854tso0000ck3p78a7zy4x";
-const MINIMUM_NIGHTS = 2;
-
-const GUEST_COUNT_MAP: Record<string, number> = {
-  "1-2": 2,
-  "3-4": 4,
-};
 
 type ContactFormData = {
   firstName: string;
   lastName: string;
   email: string;
   phone: string;
-  checkIn: string;
-  checkOut: string;
-  guests: string;
-  propertyType: string;
-  chefServices: string;
-  message?: string;
+  message: string;
 };
 
-type AvailabilityStatus =
+type FormStatus =
   | { state: "idle" }
-  | { state: "checking" }
-  | { state: "available" }
-  | { state: "unavailable"; reason: string }
-  | { state: "error"; reason: string };
-
-type BookingResult =
-  | { state: "idle" }
-  | { state: "success"; bookingId: string; totalAmount: string }
+  | { state: "success" }
   | { state: "error"; message: string };
 
 export default function ContactSection() {
@@ -47,135 +24,37 @@ export default function ContactSection() {
     register,
     handleSubmit,
     reset,
-    watch,
     formState: { errors, isSubmitting },
   } = useForm<ContactFormData>({ mode: "onBlur" });
 
-  const [availability, setAvailability] = useState<AvailabilityStatus>({ state: "idle" });
-  const [bookingResult, setBookingResult] = useState<BookingResult>({ state: "idle" });
-  const abortRef = useRef<AbortController | null>(null);
-
-  const checkIn = watch("checkIn");
-  const checkOut = watch("checkOut");
-
-  // Check availability when dates change
-  useEffect(() => {
-    setAvailability({ state: "idle" });
-
-    if (!checkIn || !checkOut) return;
-
-    const checkInDate = new Date(checkIn);
-    const checkOutDate = new Date(checkOut);
-
-    if (checkOutDate <= checkInDate) {
-      setAvailability({ state: "unavailable", reason: "Check-out must be after check-in" });
-      return;
-    }
-
-    const nights = Math.round(
-      (checkOutDate.getTime() - checkInDate.getTime()) / (1000 * 60 * 60 * 24),
-    );
-    if (nights < MINIMUM_NIGHTS) {
-      setAvailability({ state: "unavailable", reason: `Minimum stay is ${MINIMUM_NIGHTS} nights` });
-      return;
-    }
-
-    // Abort any in-flight request
-    abortRef.current?.abort();
-    const controller = new AbortController();
-    abortRef.current = controller;
-
-    setAvailability({ state: "checking" });
-
-    const checkDates = async () => {
-      try {
-        const res = await fetch(
-          `/api/availability?villaId=${VILLA_ID}&checkIn=${checkIn}&checkOut=${checkOut}`,
-          { signal: controller.signal },
-        );
-        const json = await res.json();
-        if (controller.signal.aborted) return;
-        if (!json.success) {
-          setAvailability({ state: "error", reason: json.error });
-        } else if (json.data.available) {
-          setAvailability({ state: "available" });
-        } else {
-          setAvailability({ state: "unavailable", reason: json.data.reason });
-        }
-      } catch (err: unknown) {
-        if (controller.signal.aborted) return;
-        setAvailability({
-          state: "error",
-          reason: err instanceof Error ? err.message : "Failed to check availability",
-        });
-      }
-    };
-
-    checkDates();
-
-    return () => {
-      controller.abort();
-    };
-  }, [checkIn, checkOut]);
+  const [status, setStatus] = useState<FormStatus>({ state: "idle" });
 
   const onSubmit = async (data: ContactFormData) => {
-    setBookingResult({ state: "idle" });
-
-    // Client-side validation
-    const checkInDate = new Date(data.checkIn);
-    const checkOutDate = new Date(data.checkOut);
-
-    if (checkOutDate <= checkInDate) {
-      setBookingResult({ state: "error", message: "Check-out must be after check-in" });
-      return;
-    }
-
-    const guestCount = GUEST_COUNT_MAP[data.guests];
-    if (!guestCount || guestCount < 1) {
-      setBookingResult({ state: "error", message: "Please select a valid number of guests" });
-      return;
-    }
-
-    if (availability.state === "unavailable") {
-      setBookingResult({ state: "error", message: "Selected dates are not available" });
-      return;
-    }
+    setStatus({ state: "idle" });
 
     try {
-      const res = await fetch("/api/bookings", {
+      const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          villaId: VILLA_ID,
-          guestName: `${data.firstName} ${data.lastName}`,
-          guestEmail: data.email,
-          guestPhone: data.phone,
-          checkIn: data.checkIn,
-          checkOut: data.checkOut,
-          guestCount,
-          specialRequests: data.message || undefined,
+          name: `${data.firstName} ${data.lastName}`,
+          email: data.email,
+          phone: data.phone,
+          message: data.message,
         }),
       });
 
       const json = await res.json();
 
       if (!json.success) {
-        setBookingResult({ state: "error", message: json.error });
+        setStatus({ state: "error", message: json.error || "Failed to send message" });
         return;
       }
 
-      setBookingResult({
-        state: "success",
-        bookingId: json.data.bookingId,
-        totalAmount: json.data.totalAmount,
-      });
+      setStatus({ state: "success" });
       reset();
-      setAvailability({ state: "idle" });
-    } catch (err) {
-      setBookingResult({
-        state: "error",
-        message: err instanceof Error ? err.message : "Something went wrong",
-      });
+    } catch {
+      setStatus({ state: "error", message: "Something went wrong. Please try again." });
     }
   };
 
@@ -204,6 +83,9 @@ export default function ContactSection() {
     },
   ];
 
+  const inputCls =
+    "h-11 w-full rounded-md border border-gray-300 bg-white px-3 text-base outline-none ring-0 transition focus:border-black/70 focus:ring-2 focus:ring-black/10 md:text-sm";
+
   return (
     <section id="contact" className="bg-white py-24 px-4 lg:px-8">
       <div className="mx-auto max-w-7xl">
@@ -227,9 +109,9 @@ export default function ContactSection() {
           <div>
             <Card className="border-0 p-8 shadow-lg lg:p-10">
               <div className="mb-8">
-                <h3 className="mb-4 text-3xl text-gray-900">Custom Booking Request</h3>
+                <h3 className="mb-4 text-3xl text-gray-900">Send Us a Message</h3>
                 <p className="text-gray-600">
-                  Share your vision and we'll craft the perfect luxury experience for you.
+                  Have a question or special request? We&apos;d love to hear from you.
                 </p>
               </div>
 
@@ -243,10 +125,9 @@ export default function ContactSection() {
                       placeholder="John"
                       {...register("firstName", {
                         required: "First name is required",
-                        pattern: { value: /^[a-zA-Z\s'-]+$/, message: "Letters only, no numbers or special characters" },
+                        pattern: { value: /^[a-zA-Z\s'-]+$/, message: "Letters only" },
                       })}
-                      className="h-11 w-full rounded-md border border-gray-300 bg-white px-3 text-base outline-none ring-0 transition focus:border-black/70 focus:ring-2 focus:ring-black/10 md:text-sm"
-                      aria-invalid={!!errors.firstName || undefined}
+                      className={inputCls}
                     />
                     {errors.firstName && (
                       <p className="text-sm text-red-600">{errors.firstName.message}</p>
@@ -260,10 +141,9 @@ export default function ContactSection() {
                       placeholder="Doe"
                       {...register("lastName", {
                         required: "Last name is required",
-                        pattern: { value: /^[a-zA-Z\s'-]+$/, message: "Letters only, no numbers or special characters" },
+                        pattern: { value: /^[a-zA-Z\s'-]+$/, message: "Letters only" },
                       })}
-                      className="h-11 w-full rounded-md border border-gray-300 bg-white px-3 text-base outline-none ring-0 transition focus:border-black/70 focus:ring-2 focus:ring-black/10 md:text-sm"
-                      aria-invalid={!!errors.lastName || undefined}
+                      className={inputCls}
                     />
                     {errors.lastName && (
                       <p className="text-sm text-red-600">{errors.lastName.message}</p>
@@ -281,10 +161,12 @@ export default function ContactSection() {
                       placeholder="john@example.com"
                       {...register("email", {
                         required: "Email is required",
-                        pattern: { value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, message: "Enter a valid email address" },
+                        pattern: {
+                          value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                          message: "Enter a valid email address",
+                        },
                       })}
-                      className="h-11 w-full rounded-md border border-gray-300 bg-white px-3 text-base outline-none ring-0 transition focus:border-black/70 focus:ring-2 focus:ring-black/10 md:text-sm"
-                      aria-invalid={!!errors.email || undefined}
+                      className={inputCls}
                     />
                     {errors.email && (
                       <p className="text-sm text-red-600">{errors.email.message}</p>
@@ -299,10 +181,12 @@ export default function ContactSection() {
                       placeholder="+1 (555) 123-4567"
                       {...register("phone", {
                         required: "Phone number is required",
-                        pattern: { value: /^[0-9+\s()-]+$/, message: "Numbers, +, spaces, dashes and parentheses only" },
+                        pattern: {
+                          value: /^[0-9+\s()-]+$/,
+                          message: "Numbers, +, spaces, dashes and parentheses only",
+                        },
                       })}
-                      className="h-11 w-full rounded-md border border-gray-300 bg-white px-3 text-base outline-none ring-0 transition focus:border-black/70 focus:ring-2 focus:ring-black/10 md:text-sm"
-                      aria-invalid={!!errors.phone || undefined}
+                      className={inputCls}
                     />
                     {errors.phone && (
                       <p className="text-sm text-red-600">{errors.phone.message}</p>
@@ -310,143 +194,48 @@ export default function ContactSection() {
                   </div>
                 </div>
 
-                {/* Dates */}
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label htmlFor="checkIn">Check-in Date</Label>
-                    <input
-                      id="checkIn"
-                      type="date"
-                      {...register("checkIn", { required: "Check-in date is required" })}
-                      className="h-11 w-full rounded-md border border-gray-300 bg-white px-3 text-base outline-none ring-0 transition focus:border-black/70 focus:ring-2 focus:ring-black/10 md:text-sm"
-                      aria-invalid={!!errors.checkIn || undefined}
-                    />
-                    {errors.checkIn && (
-                      <p className="text-sm text-red-600">{errors.checkIn.message}</p>
-                    )}
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="checkOut">Check-out Date</Label>
-                    <input
-                      id="checkOut"
-                      type="date"
-                      {...register("checkOut", { required: "Check-out date is required" })}
-                      className="h-11 w-full rounded-md border border-gray-300 bg-white px-3 text-base outline-none ring-0 transition focus:border-black/70 focus:ring-2 focus:ring-black/10 md:text-sm"
-                      aria-invalid={!!errors.checkOut || undefined}
-                    />
-                    {errors.checkOut && (
-                      <p className="text-sm text-red-600">{errors.checkOut.message}</p>
-                    )}
-                  </div>
-                </div>
-
-                {/* Availability feedback */}
-                {availability.state === "checking" && (
-                  <p className="text-sm text-gray-500">Checking availability...</p>
-                )}
-                {availability.state === "available" && (
-                  <p className="text-sm text-green-600">Dates are available</p>
-                )}
-                {availability.state === "unavailable" && (
-                  <p className="text-sm text-red-600">{availability.reason}</p>
-                )}
-                {availability.state === "error" && (
-                  <p className="text-sm text-red-600">{availability.reason}</p>
-                )}
-
-                {/* Preferences */}
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label htmlFor="guests">Number of Guests</Label>
-                    <select
-                      id="guests"
-                      {...register("guests", { required: "Please select guests" })}
-                      className="h-11 w-full rounded-md border border-gray-300 bg-white px-3 text-base outline-none transition focus:border-black/70 focus:ring-2 focus:ring-black/10 md:text-sm"
-                      aria-invalid={!!errors.guests || undefined}
-                    >
-                      <option value="">Select guests</option>
-                      <option value="1-2">1–2 guests</option>
-                      <option value="3-4">3–4 guests</option>
-                    </select>
-                    {errors.guests && (
-                      <p className="text-sm text-red-600">{errors.guests.message}</p>
-                    )}
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="propertyType">Villa</Label>
-                    <select
-                      id="propertyType"
-                      {...register("propertyType", { required: "Please select a villa" })}
-                      className="h-11 w-full rounded-md border border-gray-300 bg-white px-3 text-base outline-none transition focus:border-black/70 focus:ring-2 focus:ring-black/10 md:text-sm"
-                      aria-invalid={!!errors.propertyType || undefined}
-                    >
-                      <option value="">Any villa</option>
-                      <option value="beachfront">Palm Villa</option>
-                    </select>
-                    {errors.propertyType && (
-                      <p className="text-sm text-red-600">{errors.propertyType.message}</p>
-                    )}
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="chefServices">Chef Services</Label>
-                    <select
-                      id="chefServices"
-                      {...register("chefServices", { required: "Please select chef services" })}
-                      className="h-11 w-full rounded-md border border-gray-300 bg-white px-3 text-base outline-none transition focus:border-black/70 focus:ring-2 focus:ring-black/10 md:text-sm"
-                      aria-invalid={!!errors.chefServices || undefined}
-                    >
-                      <option value="">Add chef services</option>
-                      <option value="Yes">Yes</option>
-                      <option value="No">No</option>
-                    </select>
-                    {errors.chefServices && (
-                      <p className="text-sm text-red-600">{errors.chefServices.message}</p>
-                    )}
-                  </div>
-                </div>
-
                 {/* Message */}
                 <div className="space-y-2">
-                  <Label htmlFor="message">Special Requests & Details</Label>
+                  <Label htmlFor="message">Message</Label>
                   <textarea
                     id="message"
                     rows={5}
-                    placeholder="Tell us about any special occasions, dietary requirements, activities of interest, or other preferences..."
-                    {...register("message")}
+                    placeholder="Tell us about your plans, questions, or special requests..."
+                    {...register("message", { required: "Message is required" })}
                     className="w-full resize-none rounded-md border border-gray-300 bg-white px-3 py-2 text-base outline-none transition focus:border-black/70 focus:ring-2 focus:ring-black/10 md:text-sm"
                   />
+                  {errors.message && (
+                    <p className="text-sm text-red-600">{errors.message.message}</p>
+                  )}
                 </div>
 
                 {/* Submit */}
-                <Button
+                <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex w-full items-center justify-center gap-2 rounded-full bg-black py-3 text-base text-white hover:bg-black/90"
+                  className="flex w-full items-center justify-center gap-2 rounded-full bg-black py-3 text-base text-white hover:bg-black/90 disabled:opacity-50 transition"
                 >
-                  {isSubmitting ? "Sending Request…" : <>
-                    <Send className="h-4 w-4" />
-                    Send Booking Request
-                  </>}
-                </Button>
+                  {isSubmitting ? (
+                    "Sending..."
+                  ) : (
+                    <>
+                      <Send className="h-4 w-4" />
+                      Send Message
+                    </>
+                  )}
+                </button>
 
-                {/* Booking result feedback */}
-                {bookingResult.state === "success" && (
+                {/* Feedback */}
+                {status.state === "success" && (
                   <div className="rounded-md border border-green-200 bg-green-50 p-4">
-                    <p className="text-sm font-medium text-green-800">Booking created!</p>
-                    <p className="mt-1 text-sm text-green-700">
-                      Booking ID: {bookingResult.bookingId}
-                    </p>
-                    <p className="text-sm text-green-700">
-                      Total: ${bookingResult.totalAmount} XCD
+                    <p className="text-sm font-medium text-green-800">
+                      Message sent! We&apos;ll get back to you within 24 hours.
                     </p>
                   </div>
                 )}
-                {bookingResult.state === "error" && (
+                {status.state === "error" && (
                   <div className="rounded-md border border-red-200 bg-red-50 p-4">
-                    <p className="text-sm text-red-700">{bookingResult.message}</p>
+                    <p className="text-sm text-red-700">{status.message}</p>
                   </div>
                 )}
               </form>

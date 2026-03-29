@@ -118,33 +118,33 @@ export default function HeroSection() {
               </div>
 
               {/* Check-in */}
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 overflow-hidden">
                 <label className="text-white/80 text-sm font-light tracking-wide">
                   Check-in
                 </label>
-                <div className="relative">
+                <div className="relative overflow-hidden rounded-lg">
                   <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 pointer-events-none z-10" />
                   <input
                     type="date"
                     value={checkIn}
                     onChange={(e) => setCheckIn(e.target.value)}
-                    className="w-full min-w-0 max-w-full bg-white/90 backdrop-blur-sm rounded-lg px-10 py-3 text-gray-900 border-0 focus:ring-2 focus:ring-white/50 outline-none box-border"
+                    className="w-full min-w-0 max-w-full appearance-none bg-white/90 backdrop-blur-sm rounded-lg px-10 py-3 text-gray-900 border border-transparent focus:ring-2 focus:ring-white/50 outline-none box-border"
                   />
                 </div>
               </div>
 
               {/* Check-out */}
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 overflow-hidden">
                 <label className="text-white/80 text-sm font-light tracking-wide">
                   Check-out
                 </label>
-                <div className="relative">
+                <div className="relative overflow-hidden rounded-lg">
                   <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 pointer-events-none z-10" />
                   <input
                     type="date"
                     value={checkOut}
                     onChange={(e) => setCheckOut(e.target.value)}
-                    className="w-full min-w-0 max-w-full bg-white/90 backdrop-blur-sm rounded-lg px-10 py-3 text-gray-900 border-0 focus:ring-2 focus:ring-white/50 outline-none box-border"
+                    className="w-full min-w-0 max-w-full appearance-none bg-white/90 backdrop-blur-sm rounded-lg px-10 py-3 text-gray-900 border border-transparent focus:ring-2 focus:ring-white/50 outline-none box-border"
                   />
                 </div>
               </div>
