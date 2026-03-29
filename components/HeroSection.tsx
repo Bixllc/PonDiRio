@@ -86,7 +86,7 @@ export default function HeroSection() {
                   <select
                     value={villa}
                     onChange={(e) => setVilla(e.target.value)}
-                    className="w-full bg-white/90 backdrop-blur-sm rounded-lg px-4 py-3 text-gray-900 border-0 focus:ring-2 focus:ring-white/50 outline-none"
+                    className="h-[48px] w-full bg-white/90 backdrop-blur-sm rounded-lg px-4 py-3 text-gray-900 border-0 focus:ring-2 focus:ring-white/50 outline-none"
                   >
                     <option value="">All Villas</option>
                     <option value="palm-villa">Palm Villa</option>
@@ -105,7 +105,7 @@ export default function HeroSection() {
                   <select
                     value={guests}
                     onChange={(e) => setGuests(e.target.value)}
-                    className="w-full bg-white/90 backdrop-blur-sm rounded-lg px-10 py-3 text-gray-900 border-0 focus:ring-2 focus:ring-white/50 outline-none"
+                    className="h-[48px] w-full bg-white/90 backdrop-blur-sm rounded-lg px-10 py-3 text-gray-900 border-0 focus:ring-2 focus:ring-white/50 outline-none"
                   >
                     <option value="1">1 Guest</option>
                     <option value="2">2 Guests</option>
@@ -128,7 +128,7 @@ export default function HeroSection() {
                     type="date"
                     value={checkIn}
                     onChange={(e) => setCheckIn(e.target.value)}
-                    className="w-full min-w-0 max-w-full appearance-none bg-white/90 backdrop-blur-sm rounded-lg px-10 py-3 text-gray-900 border border-transparent focus:ring-2 focus:ring-white/50 outline-none box-border"
+                    className="h-[48px] w-full min-w-0 max-w-full appearance-none bg-white/90 backdrop-blur-sm rounded-lg px-10 py-3 text-gray-900 border-0 focus:ring-2 focus:ring-white/50 outline-none box-border"
                   />
                 </div>
               </div>
@@ -144,7 +144,7 @@ export default function HeroSection() {
                     type="date"
                     value={checkOut}
                     onChange={(e) => setCheckOut(e.target.value)}
-                    className="w-full min-w-0 max-w-full appearance-none bg-white/90 backdrop-blur-sm rounded-lg px-10 py-3 text-gray-900 border border-transparent focus:ring-2 focus:ring-white/50 outline-none box-border"
+                    className="h-[48px] w-full min-w-0 max-w-full appearance-none bg-white/90 backdrop-blur-sm rounded-lg px-10 py-3 text-gray-900 border-0 focus:ring-2 focus:ring-white/50 outline-none box-border"
                   />
                 </div>
               </div>
