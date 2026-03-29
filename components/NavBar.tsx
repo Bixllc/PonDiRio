@@ -80,13 +80,13 @@ export default function Navbar() {
             }`}
           >
             <a
-              href="/#villas"
+              href="/villas/palm-villa"
               className="block px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
             >
               Palm Villa
             </a>
             <a
-              href="/#villas"
+              href="/villas/bamboo-villa"
               className="block px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
             >
               Bamboo Villa
