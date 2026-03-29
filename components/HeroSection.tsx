@@ -127,6 +127,7 @@ export default function HeroSection() {
                   <select className="w-full bg-white/90 backdrop-blur-sm rounded-lg px-4 py-3 text-gray-900 border-0 focus:ring-2 focus:ring-white/50 outline-none">
                     <option>All Villas</option>
                     <option>Palm Villa</option>
+                    <option>Bamboo Villa</option>
                   </select>
                 </div>
               </div>
@@ -191,7 +192,7 @@ export default function HeroSection() {
                 disabled={loading}
                 className="flex h-[48px] w-full items-center justify-center whitespace-nowrap rounded-lg bg-amber-600 px-8 text-base font-medium text-white shadow-lg transition-all hover:bg-amber-700 disabled:opacity-50"
               >
-                {loading ? "Checking..." : "Check Availability"}
+                {loading ? "Checking..." : "Book Now"}
               </button>
             </div>
 
