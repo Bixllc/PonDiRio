@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { adminLogout } from "@/app/actions/auth";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -17,6 +18,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               Calendar Feeds
             </Link>
           </div>
+          <form action={adminLogout} className="ml-auto">
+            <button
+              type="submit"
+              className="text-sm text-gray-500 hover:text-red-600 transition-colors"
+            >
+              Logout
+            </button>
+          </form>
         </div>
       </nav>
       <main className="mx-auto max-w-6xl px-6 py-8">{children}</main>

@@ -1,0 +1,299 @@
+[     708ms] [ERROR] Warning: Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.%s 2 
+    at div
+    at div
+    at section
+    at OurCabinsSection
+    at main
+    at Home (Server)
+    at InnerLayoutRouter (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/layout-router.js:243:11)
+    at RedirectErrorBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/redirect-boundary.js:74:9)
+    at RedirectBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/redirect-boundary.js:82:11)
+    at NotFoundErrorBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/not-found-boundary.js:76:9)
+    at NotFoundBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/not-found-boundary.js:84:11)
+    at LoadingBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/layout-router.js:349:11)
+    at ErrorBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/error-boundary.js:160:11)
+    at InnerScrollAndFocusHandler (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/layout-router.js:153:9)
+    at ScrollAndFocusHandler (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/layout-router.js:228:11)
+    at RenderFromTemplateContext (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/render-from-template-context.js:16:44)
+    at OuterLayoutRouter (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/layout-router.js:370:11)
+    at body
+    at html
+    at RootLayout (Server)
+    at RedirectErrorBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/redirect-boundary.js:74:9)
+    at RedirectBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/redirect-boundary.js:82:11)
+    at NotFoundErrorBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/not-found-boundary.js:76:9)
+    at NotFoundBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/not-found-boundary.js:84:11)
+    at DevRootNotFoundBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/dev-root-not-found-boundary.js:33:11)
+    at ReactDevOverlay (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/ReactDevOverlay.js:87:9)
+    at HotReload (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:321:11)
+    at Router (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/app-router.js:207:11)
+    at ErrorBoundaryHandler (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/error-boundary.js:113:9)
+    at ErrorBoundary (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/error-boundary.js:160:11)
+    at AppRouter (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/app-router.js:585:13)
+    at ServerRoot (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:112:27)
+    at Root (webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:117:11) @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:32
+[     713ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/favicon.ico:0
+[  185650ms] [ERROR] ./app/generated/prisma/client.ts:20:1
+Module not found: Can't resolve './internal/class.js'
+  18 | import * as runtime from "@prisma/client/runtime/client"
+  19 | import * as $Enums from "./enums.js"
+> 20 | import * as $Class from "./internal/class.js"
+     | ^
+  21 | import * as Prisma from "./internal/prismaNamespace.js"
+  22 |
+  23 | export * as $Enums from './enums.js'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./lib/availability.ts
+./app/api/availability/route.ts @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:32
+[  185650ms] [ERROR] ./app/generated/prisma/client.ts:21:1
+Module not found: Can't resolve './internal/prismaNamespace.js'
+  19 | import * as $Enums from "./enums.js"
+  20 | import * as $Class from "./internal/class.js"
+> 21 | import * as Prisma from "./internal/prismaNamespace.js"
+     | ^
+  22 |
+  23 | export * as $Enums from './enums.js'
+  24 | export * from "./enums.js"
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./lib/availability.ts
+./app/api/availability/route.ts @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:32
+[  185650ms] [ERROR] ./app/generated/prisma/client.ts:23:1
+Module not found: Can't resolve './enums.js'
+  21 | import * as Prisma from "./internal/prismaNamespace.js"
+  22 |
+> 23 | export * as $Enums from './enums.js'
+     | ^
+  24 | export * from "./enums.js"
+  25 | /**
+  26 |  * ## Prisma Client
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./lib/availability.ts
+./app/api/availability/route.ts @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:32
+[  185756ms] [ERROR] ./app/generated/prisma/client.ts:20:1
+Module not found: Can't resolve './internal/class.js'
+  18 | import * as runtime from "@prisma/client/runtime/client"
+  19 | import * as $Enums from "./enums.js"
+> 20 | import * as $Class from "./internal/class.js"
+     | ^
+  21 | import * as Prisma from "./internal/prismaNamespace.js"
+  22 |
+  23 | export * as $Enums from './enums.js'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./lib/availability.ts
+./app/api/availability/route.ts @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:32
+[  185756ms] [ERROR] ./app/generated/prisma/client.ts:21:1
+Module not found: Can't resolve './internal/prismaNamespace.js'
+  19 | import * as $Enums from "./enums.js"
+  20 | import * as $Class from "./internal/class.js"
+> 21 | import * as Prisma from "./internal/prismaNamespace.js"
+     | ^
+  22 |
+  23 | export * as $Enums from './enums.js'
+  24 | export * from "./enums.js"
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./lib/availability.ts
+./app/api/availability/route.ts @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:32
+[  185756ms] [ERROR] ./app/generated/prisma/client.ts:23:1
+Module not found: Can't resolve './enums.js'
+  21 | import * as Prisma from "./internal/prismaNamespace.js"
+  22 |
+> 23 | export * as $Enums from './enums.js'
+     | ^
+  24 | export * from "./enums.js"
+  25 | /**
+  26 |  * ## Prisma Client
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./lib/availability.ts
+./app/api/availability/route.ts @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:32
+[  186758ms] [ERROR] ./app/generated/prisma/client.ts:20:1
+Module not found: Can't resolve './internal/class.js'
+  18 | import * as runtime from "@prisma/client/runtime/client"
+  19 | import * as $Enums from "./enums.js"
+> 20 | import * as $Class from "./internal/class.js"
+     | ^
+  21 | import * as Prisma from "./internal/prismaNamespace.js"
+  22 |
+  23 | export * as $Enums from './enums.js'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./lib/availability.ts
+./app/api/availability/route.ts @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:32
+[  186759ms] [ERROR] ./app/generated/prisma/client.ts:21:1
+Module not found: Can't resolve './internal/prismaNamespace.js'
+  19 | import * as $Enums from "./enums.js"
+  20 | import * as $Class from "./internal/class.js"
+> 21 | import * as Prisma from "./internal/prismaNamespace.js"
+     | ^
+  22 |
+  23 | export * as $Enums from './enums.js'
+  24 | export * from "./enums.js"
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./lib/availability.ts
+./app/api/availability/route.ts @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:32
+[  186759ms] [ERROR] ./app/generated/prisma/client.ts:23:1
+Module not found: Can't resolve './enums.js'
+  21 | import * as Prisma from "./internal/prismaNamespace.js"
+  22 |
+> 23 | export * as $Enums from './enums.js'
+     | ^
+  24 | export * from "./enums.js"
+  25 | /**
+  26 |  * ## Prisma Client
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./lib/availability.ts
+./app/api/availability/route.ts @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:32
+[  186785ms] [ERROR] ./app/generated/prisma/client.ts:20:1
+Module not found: Can't resolve './internal/class.js'
+  18 | import * as runtime from "@prisma/client/runtime/client"
+  19 | import * as $Enums from "./enums.js"
+> 20 | import * as $Class from "./internal/class.js"
+     | ^
+  21 | import * as Prisma from "./internal/prismaNamespace.js"
+  22 |
+  23 | export * as $Enums from './enums.js'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./lib/availability.ts
+./app/api/availability/route.ts @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:32
+[  186785ms] [ERROR] ./app/generated/prisma/client.ts:21:1
+Module not found: Can't resolve './internal/prismaNamespace.js'
+  19 | import * as $Enums from "./enums.js"
+  20 | import * as $Class from "./internal/class.js"
+> 21 | import * as Prisma from "./internal/prismaNamespace.js"
+     | ^
+  22 |
+  23 | export * as $Enums from './enums.js'
+  24 | export * from "./enums.js"
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./lib/availability.ts
+./app/api/availability/route.ts @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:32
+[  186785ms] [ERROR] ./app/generated/prisma/client.ts:23:1
+Module not found: Can't resolve './enums.js'
+  21 | import * as Prisma from "./internal/prismaNamespace.js"
+  22 |
+> 23 | export * as $Enums from './enums.js'
+     | ^
+  24 | export * from "./enums.js"
+  25 | /**
+  26 |  * ## Prisma Client
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./lib/availability.ts
+./app/api/availability/route.ts @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:32
+[  186854ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/_next/static/webpack/ff91d899497d00d7.webpack.hot-update.json:0
+[  186854ms] [WARNING] [Fast Refresh] performing full reload
+
+Fast Refresh will perform a full reload when you edit a file that's imported by modules outside of the React rendering tree.
+You might have a file which exports a React component but also exports a value that is imported by a non-React component file.
+Consider migrating the non-React component export to a separate file and importing it into both files.
+
+It is also possible the parent component of the component you edited is a class component, which disables Fast Refresh.
+Fast Refresh requires at least one parent function component in your React tree. @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:112
+[  186856ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/?_rsc=13tu6#contact:0
+[  186861ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/?_rsc=13tu6#contact:0
+[  186894ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/#contact:0
+[  187073ms] Error: Module not found: Can't resolve './internal/class.js'
+  18 | import * as runtime from "@prisma/client/runtime/client"
+  19 | import * as $Enums from "./enums.js"
+> 20 | import * as $Class from "./internal/class.js"
+     | ^
+  21 | import * as Prisma from "./internal/prismaNamespace.js"
+  22 |
+  23 | export * as $Enums from './enums.js'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./lib/availability.ts
+./app/api/availability/route.ts
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at getNotFoundError (file:///Users/sheneskawilliams/Desktop/pondiriver-main/node_modules/next/dist/build/webpack/plugins/wellknown-errors-plugin/parseNotFoundError.js:124:16)
+    at async getModuleBuildError (file:///Users/sheneskawilliams/Desktop/pondiriver-main/node_modules/next/dist/build/webpack/plugins/wellknown-errors-plugin/webpackModuleError.js:104:27)
+    at async (file:///Users/sheneskawilliams/Desktop/pondiriver-main/node_modules/next/dist/build/webpack/plugins/wellknown-errors-plugin/index.js:29:49)
+    at async (file:///Users/sheneskawilliams/Desktop/pondiriver-main/node_modules/next/dist/build/webpack/plugins/wellknown-errors-plugin/index.js:27:21)
+[  187073ms] [ERROR] ./app/generated/prisma/client.ts:20:1
+Module not found: Can't resolve './internal/class.js'
+  18 | import * as runtime from "@prisma/client/runtime/client"
+  19 | import * as $Enums from "./enums.js"
+> 20 | import * as $Class from "./internal/class.js"
+     | ^
+  21 | import * as Prisma from "./internal/prismaNamespace.js"
+  22 |
+  23 | export * as $Enums from './enums.js'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./lib/availability.ts
+./app/api/availability/route.ts @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/hydration-error-info.js:62
+[  187073ms] [ERROR] ./app/generated/prisma/client.ts:21:1
+Module not found: Can't resolve './internal/prismaNamespace.js'
+  19 | import * as $Enums from "./enums.js"
+  20 | import * as $Class from "./internal/class.js"
+> 21 | import * as Prisma from "./internal/prismaNamespace.js"
+     | ^
+  22 |
+  23 | export * as $Enums from './enums.js'
+  24 | export * from "./enums.js"
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./lib/availability.ts
+./app/api/availability/route.ts @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/hydration-error-info.js:62
+[  187073ms] [ERROR] ./app/generated/prisma/client.ts:23:1
+Module not found: Can't resolve './enums.js'
+  21 | import * as Prisma from "./internal/prismaNamespace.js"
+  22 |
+> 23 | export * as $Enums from './enums.js'
+     | ^
+  24 | export * from "./enums.js"
+  25 | /**
+  26 |  * ## Prisma Client
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./lib/availability.ts
+./app/api/availability/route.ts @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/hydration-error-info.js:62
+[  209960ms] [WARNING] [Fast Refresh] performing full reload
+
+Fast Refresh will perform a full reload when you edit a file that's imported by modules outside of the React rendering tree.
+You might have a file which exports a React component but also exports a value that is imported by a non-React component file.
+Consider migrating the non-React component export to a separate file and importing it into both files.
+
+It is also possible the parent component of the component you edited is a class component, which disables Fast Refresh.
+Fast Refresh requires at least one parent function component in your React tree. @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/pages/hot-reloader-client.js:347
