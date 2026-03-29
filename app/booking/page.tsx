@@ -1,10 +1,13 @@
 "use client";
 
-import { useState, useEffect, useRef, Suspense } from "react";
+import { useState, useEffect, useRef, useCallback, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { useSearchParams, useRouter } from "next/navigation";
-import { User, Mail, Phone, Calendar, Users } from "lucide-react";
+import { User, Mail, Phone, Users } from "lucide-react";
 import { initiateBookingPayment } from "@/app/actions/booking";
+import { DayPicker, DateRange } from "react-day-picker";
+import { format, addMonths, eachDayOfInterval, startOfDay, differenceInCalendarDays, parseISO } from "date-fns";
+import "react-day-picker/style.css";
 
 const VILLA_ID = "cmn854tso0000ck3p78a7zy4x";
 const CLEANING_FEE = 75;
@@ -38,6 +41,7 @@ function BookingPageContent() {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<BookingFormData>({
     mode: "onBlur",
@@ -53,6 +57,78 @@ function BookingPageContent() {
   const [pricePerNight, setPricePerNight] = useState<number | null>(null);
   const [showFacRedirect, setShowFacRedirect] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
+
+  // Calendar state
+  const [blockedDays, setBlockedDays] = useState<Date[]>([]);
+  const [selectedRange, setSelectedRange] = useState<DateRange | undefined>(() => {
+    const ci = searchParams.get("checkIn");
+    const co = searchParams.get("checkOut");
+    if (ci && co) return { from: parseISO(ci), to: parseISO(co) };
+    return undefined;
+  });
+  const [calMonths, setCalMonths] = useState(2);
+
+  // Responsive month count
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 768px)");
+    const update = () => setCalMonths(mq.matches ? 1 : 2);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  // Fetch blocked ranges on mount
+  useEffect(() => {
+    fetch(`/api/availability/blocked?villaId=${VILLA_ID}`)
+      .then((r) => r.json())
+      .then((json) => {
+        if (!json.success) return;
+        const days: Date[] = [];
+        for (const range of json.data as { start: string; end: string }[]) {
+          const interval = eachDayOfInterval({
+            start: parseISO(range.start),
+            end: parseISO(range.end),
+          });
+          days.push(...interval);
+        }
+        setBlockedDays(days);
+      })
+      .catch(() => {});
+  }, []);
+
+  // Handle range selection
+  const handleRangeSelect = useCallback(
+    (range: DateRange | undefined) => {
+      if (!range) {
+        setSelectedRange(undefined);
+        setValue("checkIn", "");
+        setValue("checkOut", "");
+        return;
+      }
+      // If only from is picked, or to hasn't been set yet
+      if (range.from && !range.to) {
+        setSelectedRange(range);
+        setValue("checkIn", format(range.from, "yyyy-MM-dd"));
+        setValue("checkOut", "");
+        return;
+      }
+      // Both picked — enforce minimum nights
+      if (range.from && range.to) {
+        const nights = differenceInCalendarDays(range.to, range.from);
+        if (nights < MINIMUM_NIGHTS) {
+          // Don't accept the range, keep only from
+          setSelectedRange({ from: range.from, to: undefined });
+          setValue("checkIn", format(range.from, "yyyy-MM-dd"));
+          setValue("checkOut", "");
+          return;
+        }
+        setSelectedRange(range);
+        setValue("checkIn", format(range.from, "yyyy-MM-dd"));
+        setValue("checkOut", format(range.to, "yyyy-MM-dd"));
+      }
+    },
+    [setValue],
+  );
 
   const checkIn = watch("checkIn");
   const checkOut = watch("checkOut");
@@ -365,65 +441,84 @@ function BookingPageContent() {
               Stay Details
             </h2>
 
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
-              {/* Check-in */}
-              <div className="space-y-1.5">
-                <label className="text-sm font-medium text-[#1a1a2e]">
-                  Check-in Date
-                </label>
-                <div className="relative">
-                  <Calendar className={iconCls} />
-                  <input
-                    type="date"
-                    {...register("checkIn", { required: "Check-in is required" })}
-                    className={inputCls}
-                  />
-                </div>
-                {errors.checkIn && (
-                  <p className="text-xs text-red-500">{errors.checkIn.message}</p>
-                )}
-              </div>
+            {/* Hidden inputs for form validation */}
+            <input type="hidden" {...register("checkIn", { required: "Check-in is required" })} />
+            <input type="hidden" {...register("checkOut", { required: "Check-out is required" })} />
 
-              {/* Check-out */}
-              <div className="space-y-1.5">
-                <label className="text-sm font-medium text-[#1a1a2e]">
-                  Check-out Date
-                </label>
-                <div className="relative">
-                  <Calendar className={iconCls} />
-                  <input
-                    type="date"
-                    {...register("checkOut", { required: "Check-out is required" })}
-                    className={inputCls}
-                  />
-                </div>
-                {errors.checkOut && (
-                  <p className="text-xs text-red-500">{errors.checkOut.message}</p>
-                )}
-              </div>
+            {/* Date range picker */}
+            <div className="rdp-gold flex justify-center">
+              <DayPicker
+                mode="range"
+                selected={selectedRange}
+                onSelect={handleRangeSelect}
+                numberOfMonths={calMonths}
+                min={MINIMUM_NIGHTS}
+                disabled={[
+                  { before: startOfDay(new Date()) },
+                  { after: addMonths(new Date(), 6) },
+                  ...blockedDays,
+                ]}
+                excludeDisabled
+                defaultMonth={new Date()}
+              />
+            </div>
 
-              {/* Guests */}
-              <div className="space-y-1.5">
-                <label className="text-sm font-medium text-[#1a1a2e]">
-                  Number of Guests
-                </label>
-                <div className="relative">
-                  <Users className={iconCls} />
-                  <select
-                    {...register("guests", { required: "Please select guests" })}
-                    className={`${inputCls} appearance-none`}
-                  >
-                    {[1, 2, 3, 4, 5, 6].map((n) => (
-                      <option key={n} value={n}>
-                        {n} {n === 1 ? "Guest" : "Guests"}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                {errors.guests && (
-                  <p className="text-xs text-red-500">{errors.guests.message}</p>
-                )}
+            {/* Selected dates display */}
+            <div className="mt-4 flex items-center gap-4 text-sm">
+              <div className="flex-1 rounded-lg border border-gray-200 px-4 py-3">
+                <span className="text-xs text-gray-400">Check-in</span>
+                <p className="font-medium text-[#1a1a2e]">
+                  {selectedRange?.from ? format(selectedRange.from, "MMM d, yyyy") : "Select date"}
+                </p>
               </div>
+              <span className="text-gray-300">&rarr;</span>
+              <div className="flex-1 rounded-lg border border-gray-200 px-4 py-3">
+                <span className="text-xs text-gray-400">Check-out</span>
+                <p className="font-medium text-[#1a1a2e]">
+                  {selectedRange?.to ? format(selectedRange.to, "MMM d, yyyy") : "Select date"}
+                </p>
+              </div>
+            </div>
+
+            {/* Clear dates */}
+            {selectedRange?.from && (
+              <button
+                type="button"
+                onClick={() => handleRangeSelect(undefined)}
+                className="mt-3 text-xs font-medium text-[#C8940A] underline underline-offset-2 hover:text-[#b08308]"
+              >
+                Clear dates
+              </button>
+            )}
+
+            {errors.checkIn && !checkIn && (
+              <p className="mt-2 text-xs text-red-500">{errors.checkIn.message}</p>
+            )}
+            {errors.checkOut && !checkOut && (
+              <p className="mt-2 text-xs text-red-500">{errors.checkOut.message}</p>
+            )}
+
+            {/* Guests */}
+            <div className="mt-5 space-y-1.5">
+              <label className="text-sm font-medium text-[#1a1a2e]">
+                Number of Guests
+              </label>
+              <div className="relative">
+                <Users className={iconCls} />
+                <select
+                  {...register("guests", { required: "Please select guests" })}
+                  className={`${inputCls} appearance-none`}
+                >
+                  {[1, 2, 3, 4, 5, 6].map((n) => (
+                    <option key={n} value={n}>
+                      {n} {n === 1 ? "Guest" : "Guests"}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {errors.guests && (
+                <p className="text-xs text-red-500">{errors.guests.message}</p>
+              )}
             </div>
 
             {/* Availability feedback */}

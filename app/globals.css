@@ -23,3 +23,30 @@ html { scroll-behavior: smooth; }
   .animate-bounceY { animation: none; }
 }
 
+/* react-day-picker gold theme */
+.rdp-gold .rdp-root {
+  --rdp-accent-color: #C8940A;
+  --rdp-accent-background-color: rgba(200, 148, 10, 0.12);
+  --rdp-range_middle-background-color: rgba(200, 148, 10, 0.15);
+  --rdp-range_middle-color: #1a1a2e;
+  --rdp-range_start-color: #fff;
+  --rdp-range_end-color: #fff;
+  --rdp-range_start-date-background-color: #C8940A;
+  --rdp-range_end-date-background-color: #C8940A;
+  --rdp-selected-border: 2px solid #C8940A;
+  --rdp-today-color: #C8940A;
+  --rdp-disabled-opacity: 1;
+}
+/* Navigation arrows: black */
+.rdp-gold .rdp-button_previous svg,
+.rdp-gold .rdp-button_next svg {
+  fill: #1a1a2e;
+}
+/* Blocked / disabled dates: gray + strikethrough */
+.rdp-gold .rdp-disabled .rdp-day_button {
+  color: #b0b0b0;
+  text-decoration: line-through;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
