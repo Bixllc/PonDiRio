@@ -214,11 +214,10 @@ export default function HeroSection() {
                   Guests
                 </label>
                 <div className="relative">
-                  <Users className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 pointer-events-none z-10" />
                   <select
                     value={guests}
                     onChange={(e) => setGuests(e.target.value)}
-                    className="h-[48px] w-full bg-white/90 backdrop-blur-sm rounded-lg px-10 py-3 text-gray-900 border-0 focus:ring-2 focus:ring-white/50 outline-none"
+                    className="h-[48px] w-full bg-white/90 backdrop-blur-sm rounded-lg px-4 py-3 text-gray-900 border-0 focus:ring-2 focus:ring-white/50 outline-none"
                   >
                     <option value="1">1 Guest</option>
                     <option value="2">2 Guests</option>
