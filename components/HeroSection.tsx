@@ -3,9 +3,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Calendar, Users } from "lucide-react";
-import { Button } from "./ui/button";
-
-const VILLA_ID = "cmn854tso0000ck3p78a7zy4x";
 
 const carouselImages = [
   "/carousel-01.jpg",
@@ -30,56 +27,18 @@ const duplicatedImages = [...carouselImages, ...carouselImages];
 
 export default function HeroSection() {
   const router = useRouter();
+  const [villa, setVilla] = useState("");
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [guests, setGuests] = useState("2");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
-  async function handleCheck() {
-    setError("");
-
-    if (!checkIn || !checkOut) {
-      setError("Please select check-in and check-out dates");
-      return;
-    }
-
-    if (new Date(checkOut) <= new Date(checkIn)) {
-      setError("Check-out must be after check-in");
-      return;
-    }
-
-    const nights = Math.round(
-      (new Date(checkOut).getTime() - new Date(checkIn).getTime()) / (1000 * 60 * 60 * 24),
-    );
-    if (nights < 2) {
-      setError("Minimum stay is 2 nights");
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const res = await fetch(
-        `/api/availability?villaId=${VILLA_ID}&checkIn=${checkIn}&checkOut=${checkOut}`,
-      );
-      const json = await res.json();
-
-      if (!json.success) {
-        setError(json.error || "Something went wrong");
-        return;
-      }
-
-      if (!json.data.available) {
-        setError("Dates unavailable");
-        return;
-      }
-
-      router.push(`/booking?checkIn=${checkIn}&checkOut=${checkOut}&guests=${guests}`);
-    } catch {
-      setError("Failed to check availability");
-    } finally {
-      setLoading(false);
-    }
+  function handleBookNow() {
+    const params = new URLSearchParams();
+    if (villa) params.set("villa", villa);
+    if (checkIn) params.set("checkIn", checkIn);
+    if (checkOut) params.set("checkOut", checkOut);
+    params.set("guests", guests);
+    router.push(`/booking?${params.toString()}`);
   }
 
   return (
@@ -116,18 +75,22 @@ export default function HeroSection() {
 
         {/* Booking Bar */}
         <div className="w-full max-w-5xl mt-8">
-          <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl p-6">
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+          <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl p-6 overflow-hidden">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end overflow-hidden">
               {/* Villa Selection */}
               <div className="flex flex-col gap-2">
                 <label className="text-white/80 text-sm font-light tracking-wide">
                   Villa
                 </label>
                 <div className="relative">
-                  <select className="w-full bg-white/90 backdrop-blur-sm rounded-lg px-4 py-3 text-gray-900 border-0 focus:ring-2 focus:ring-white/50 outline-none">
-                    <option>All Villas</option>
-                    <option>Palm Villa</option>
-                    <option>Bamboo Villa</option>
+                  <select
+                    value={villa}
+                    onChange={(e) => setVilla(e.target.value)}
+                    className="w-full bg-white/90 backdrop-blur-sm rounded-lg px-4 py-3 text-gray-900 border-0 focus:ring-2 focus:ring-white/50 outline-none"
+                  >
+                    <option value="">All Villas</option>
+                    <option value="palm-villa">Palm Villa</option>
+                    <option value="bamboo-villa">Bamboo Villa</option>
                   </select>
                 </div>
               </div>
@@ -165,7 +128,7 @@ export default function HeroSection() {
                     type="date"
                     value={checkIn}
                     onChange={(e) => setCheckIn(e.target.value)}
-                    className="w-full min-w-0 bg-white/90 backdrop-blur-sm rounded-lg px-10 py-3 text-gray-900 border-0 focus:ring-2 focus:ring-white/50 outline-none"
+                    className="w-full min-w-0 max-w-full bg-white/90 backdrop-blur-sm rounded-lg px-10 py-3 text-gray-900 border-0 focus:ring-2 focus:ring-white/50 outline-none box-border"
                   />
                 </div>
               </div>
@@ -181,25 +144,19 @@ export default function HeroSection() {
                     type="date"
                     value={checkOut}
                     onChange={(e) => setCheckOut(e.target.value)}
-                    className="w-full min-w-0 bg-white/90 backdrop-blur-sm rounded-lg px-10 py-3 text-gray-900 border-0 focus:ring-2 focus:ring-white/50 outline-none"
+                    className="w-full min-w-0 max-w-full bg-white/90 backdrop-blur-sm rounded-lg px-10 py-3 text-gray-900 border-0 focus:ring-2 focus:ring-white/50 outline-none box-border"
                   />
                 </div>
               </div>
 
-              {/* Check Availability Button */}
+              {/* Book Now Button */}
               <button
-                onClick={handleCheck}
-                disabled={loading}
-                className="flex h-[48px] w-full items-center justify-center whitespace-nowrap rounded-lg bg-amber-600 px-8 text-base font-medium text-white shadow-lg transition-all hover:bg-amber-700 disabled:opacity-50"
+                onClick={handleBookNow}
+                className="flex h-[48px] w-full items-center justify-center whitespace-nowrap rounded-lg bg-amber-600 px-8 text-base font-medium text-white shadow-lg transition-all hover:bg-amber-700"
               >
-                {loading ? "Checking..." : "Check Availability"}
+                Book Now
               </button>
             </div>
-
-            {/* Error message */}
-            {error && (
-              <p className="mt-4 text-center text-sm text-red-400">{error}</p>
-            )}
           </div>
         </div>
 
