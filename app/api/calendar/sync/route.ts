@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { syncAllFeeds } from "@/lib/calendar";
 
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 export async function POST(request: NextRequest) {
   const secret = process.env.SYNC_SECRET;
   if (!secret) {
@@ -22,9 +25,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ results }, { status });
   } catch (error) {
     console.error("Calendar sync error:", error);
-    return NextResponse.json(
-      { error: "Calendar sync failed" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Calendar sync failed" }, { status: 500 });
   }
 }

@@ -8,42 +8,38 @@ interface SyncFeedResult {
   error?: string;
 }
 
-/**
- * Fetch and parse an iCal feed, then upsert events into ExternalCalendarEvent.
- * Events that no longer appear in the feed are deleted.
- */
 export async function syncFeed(feed: {
   id: string;
   villaId: string;
   feedUrl: string;
 }): Promise<SyncFeedResult> {
-  // Fetch and parse the iCal data
-  const parsed = await ical.async.fromURL(feed.feedUrl);
+  const ical = await import("node-ical");
+  const { prisma } = await import("./prisma");
 
-  // Extract VEVENTs with valid dates and UIDs
+  const parsed = await ical.default.async.fromURL(feed.feedUrl);
+
   const events: { uid: string; start: Date; end: Date; summary: string; raw: string }[] = [];
 
   for (const key of Object.keys(parsed)) {
     const component = parsed[key];
     if (!component || component.type !== "VEVENT") continue;
-    const event = component as VEvent;
+    if (!("uid" in component) || !("start" in component) || !("end" in component)) continue;
+    if (!component.uid || !component.start || !component.end) continue;
 
-    if (!event.uid || !event.start || !event.end) continue;
-
-    const summary = typeof event.summary === "string"
-      ? event.summary
-      : event.summary?.val || "";
+    const summary =
+      typeof component.summary === "string"
+        ? component.summary
+        : component.summary?.val || "";
 
     events.push({
-      uid: event.uid,
-      start: new Date(event.start),
-      end: new Date(event.end),
+      uid: component.uid,
+      start: new Date(component.start),
+      end: new Date(component.end),
       summary,
       raw: JSON.stringify(component),
     });
   }
 
-  // Upsert each event using the composite unique key (feedId + eventUid)
   let upserted = 0;
   for (const event of events) {
     await prisma.externalCalendarEvent.upsert({
@@ -72,7 +68,6 @@ export async function syncFeed(feed: {
     upserted++;
   }
 
-  // Remove events that are no longer in the feed
   const currentUids = events.map((e) => e.uid);
   const { count: removed } = await prisma.externalCalendarEvent.deleteMany({
     where: {
@@ -81,7 +76,6 @@ export async function syncFeed(feed: {
     },
   });
 
-  // Update last_synced_at
   await prisma.externalCalendarFeed.update({
     where: { id: feed.id },
     data: { lastSyncedAt: new Date() },
@@ -90,10 +84,9 @@ export async function syncFeed(feed: {
   return { feedId: feed.id, eventsUpserted: upserted, eventsRemoved: removed };
 }
 
-/**
- * Sync all active external calendar feeds.
- */
 export async function syncAllFeeds(): Promise<SyncFeedResult[]> {
+  const { prisma } = await import("./prisma");
+
   const feeds = await prisma.externalCalendarFeed.findMany({
     where: { isActive: true },
     select: { id: true, villaId: true, feedUrl: true, sourceName: true },
