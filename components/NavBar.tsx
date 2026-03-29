@@ -3,12 +3,13 @@
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Menu, X } from "lucide-react";
 import { Button } from "./ui/button";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVillasOpen, setIsVillasOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
   const isHomePage = pathname === "/";
@@ -106,18 +107,104 @@ export default function Navbar() {
         </a>
       </nav>
 
-      {/* Book Now Button */}
-      <Link href="/booking">
-        <Button
-          className={`transition-all px-6 shadow-none ${
+      {/* Book Now Button (desktop only) */}
+      <div className="hidden md:block">
+        <Link href="/booking">
+          <Button
+            className={`transition-all px-6 shadow-none ${
+              shouldShowScrolledStyle
+                ? "bg-amber-600 hover:bg-amber-700 text-white border-0"
+                : "bg-white/10 backdrop-blur-sm text-white border border-white/30 hover:bg-white/20"
+            }`}
+          >
+            Book Now
+          </Button>
+        </Link>
+      </div>
+
+      {/* Hamburger Button (mobile only) */}
+      <button
+        className="md:hidden p-2"
+        onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+        aria-label="Toggle menu"
+      >
+        {isMobileMenuOpen ? (
+          <X
+            className={`w-6 h-6 ${shouldShowScrolledStyle ? "text-gray-900" : "text-white"}`}
+          />
+        ) : (
+          <Menu
+            className={`w-6 h-6 ${shouldShowScrolledStyle ? "text-gray-900" : "text-white"}`}
+          />
+        )}
+      </button>
+
+      {/* Mobile Menu Dropdown */}
+      {isMobileMenuOpen && (
+        <div
+          className={`absolute top-full left-0 right-0 md:hidden border-t transition-all duration-300 ${
             shouldShowScrolledStyle
-              ? "bg-amber-600 hover:bg-amber-700 text-white border-0"
-              : "bg-white/10 backdrop-blur-sm text-white border border-white/30 hover:bg-white/20"
+              ? "bg-white/95 backdrop-blur-lg border-gray-200"
+              : "bg-black/80 backdrop-blur-lg border-white/10"
           }`}
         >
-          Book Now
-        </Button>
-      </Link>
+          <nav className="flex flex-col px-8 py-4 gap-1">
+            <a
+              href="/#about"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={`py-3 text-sm tracking-wide ${
+                shouldShowScrolledStyle
+                  ? "text-gray-700 hover:text-gray-900"
+                  : "text-white/90 hover:text-white"
+              }`}
+            >
+              About
+            </a>
+            <a
+              href="/villas/palm-villa"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={`py-3 text-sm tracking-wide ${
+                shouldShowScrolledStyle
+                  ? "text-gray-700 hover:text-gray-900"
+                  : "text-white/90 hover:text-white"
+              }`}
+            >
+              Palm Villa
+            </a>
+            <a
+              href="/villas/bamboo-villa"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={`py-3 text-sm tracking-wide ${
+                shouldShowScrolledStyle
+                  ? "text-gray-700 hover:text-gray-900"
+                  : "text-white/90 hover:text-white"
+              }`}
+            >
+              Bamboo Villa
+            </a>
+            <a
+              href="/contact"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={`py-3 text-sm tracking-wide ${
+                shouldShowScrolledStyle
+                  ? "text-gray-700 hover:text-gray-900"
+                  : "text-white/90 hover:text-white"
+              }`}
+            >
+              Contact
+            </a>
+            <Link
+              href="/booking"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="mt-2 mb-1"
+            >
+              <Button className="w-full bg-amber-600 hover:bg-amber-700 text-white border-0 shadow-none">
+                Book Now
+              </Button>
+            </Link>
+          </nav>
+        </div>
+      )}
     </header>
   );
 }

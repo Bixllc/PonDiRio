@@ -192,7 +192,7 @@ export default function HeroSection() {
                 disabled={loading}
                 className="flex h-[48px] w-full items-center justify-center whitespace-nowrap rounded-lg bg-amber-600 px-8 text-base font-medium text-white shadow-lg transition-all hover:bg-amber-700 disabled:opacity-50"
               >
-                {loading ? "Checking..." : "Book Now"}
+                {loading ? "Checking..." : "Check Availability"}
               </button>
             </div>
 
