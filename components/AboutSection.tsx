@@ -3,22 +3,22 @@ import Link from "next/link";
 const rows = [
   {
     num: "01",
-    img: "/img9.JPG",
-    alt: "Wood interior detail",
+    img: "/about-design.jpeg",
+    alt: "Luxury villa bedroom with wooden beams and natural furnishings",
     heading: "Personalized Design",
     body: "The use of beautiful wood and trees from the property adds authenticity, sustainability and a powerful story. Handcrafted pieces and natural wood accents makes the villas feel effortlessly stylish and grounded in nature.",
   },
   {
     num: "02",
-    img: "/river3.jpg",
-    alt: "Crystal-clear river",
+    img: "/about-experience.jpg",
+    alt: "Guests enjoying riverside dining together",
     heading: "The Experience",
     body: "The river access, views and sound create unique unforgettable moments of bliss, relaxation and fun.",
   },
   {
     num: "03",
-    img: "/river2.jpg",
-    alt: "Aerial view of the estate",
+    img: "/about-location.jpg",
+    alt: "Guest relaxing in the river with a glass of wine",
     heading: "Location",
     body: "The villas are nestled in the hills of St Mary on the property known as the Warwick Castle Estate through which the Rio Nuevo runs.",
   },

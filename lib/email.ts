@@ -214,13 +214,16 @@ export async function sendContactMessage(
 </body>
 </html>`.trim();
 
-    const { error } = await resend.emails.send({
+    // TODO: Change to "info@pondirio.com" once domain is verified in Resend
+    const { data, error } = await resend.emails.send({
       from: FROM_ADDRESS,
-      to: "info@pondirio.com",
+      to: "onboarding@resend.dev",
       replyTo: input.email,
       subject: `Contact from ${input.name}`,
       html,
     });
+
+    console.log("[email] Contact message result:", { data, error });
 
     if (error) {
       console.error("[email] Failed to send contact message:", error);

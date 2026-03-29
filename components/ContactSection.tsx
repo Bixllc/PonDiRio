@@ -229,7 +229,7 @@ export default function ContactSection() {
                 {status.state === "success" && (
                   <div className="rounded-md border border-green-200 bg-green-50 p-4">
                     <p className="text-sm font-medium text-green-800">
-                      Message sent! We&apos;ll get back to you within 24 hours.
+                      Thank you for reaching out! We&apos;ll get back to you within 24 hours.
                     </p>
                   </div>
                 )}

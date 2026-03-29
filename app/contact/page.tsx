@@ -1,7 +1,52 @@
+"use client";
+
+import { useState } from "react";
 import NavBar from "../../components/NavBar";
 import Footer from "../../components/Footer";
 
 export default function ContactPage() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    console.log("form submitted");
+    setStatus("sending");
+    setErrorMsg("");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, phone, message }),
+      });
+
+      const json = await res.json();
+
+      if (!json.success) {
+        setStatus("error");
+        setErrorMsg(json.error || "Failed to send message");
+        return;
+      }
+
+      setStatus("success");
+      setName("");
+      setEmail("");
+      setPhone("");
+      setMessage("");
+    } catch {
+      setStatus("error");
+      setErrorMsg("Something went wrong. Please try again.");
+    }
+  }
+
+  const inputCls =
+    "w-full px-4 py-3 border border-gray-300 bg-white text-[#1a2332] text-base outline-none focus:border-amber-500 transition-colors";
+
   return (
     <main className="min-h-screen">
       <NavBar />
@@ -86,7 +131,7 @@ export default function ContactPage() {
 
             {/* Right - Contact Form */}
             <div>
-              <form className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium text-[#1a2332] mb-2">
                     Name
@@ -94,7 +139,9 @@ export default function ContactPage() {
                   <input
                     type="text"
                     required
-                    className="w-full px-4 py-3 border border-gray-300 bg-white text-[#1a2332] text-base outline-none focus:border-amber-500 transition-colors"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className={inputCls}
                   />
                 </div>
 
@@ -105,7 +152,9 @@ export default function ContactPage() {
                   <input
                     type="email"
                     required
-                    className="w-full px-4 py-3 border border-gray-300 bg-white text-[#1a2332] text-base outline-none focus:border-amber-500 transition-colors"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className={inputCls}
                   />
                 </div>
 
@@ -115,7 +164,9 @@ export default function ContactPage() {
                   </label>
                   <input
                     type="tel"
-                    className="w-full px-4 py-3 border border-gray-300 bg-white text-[#1a2332] text-base outline-none focus:border-amber-500 transition-colors"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className={inputCls}
                   />
                 </div>
 
@@ -126,16 +177,32 @@ export default function ContactPage() {
                   <textarea
                     required
                     rows={6}
-                    className="w-full px-4 py-3 border border-gray-300 bg-white text-[#1a2332] text-base outline-none focus:border-amber-500 transition-colors resize-none"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    className={`${inputCls} resize-none`}
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full py-4 rounded-lg bg-amber-600 text-white text-base font-medium shadow-lg hover:bg-amber-700 transition-all"
+                  disabled={status === "sending"}
+                  className="w-full py-4 rounded-lg bg-amber-600 text-white text-base font-medium shadow-lg hover:bg-amber-700 transition-all disabled:opacity-50"
                 >
-                  Send Message
+                  {status === "sending" ? "Sending..." : "Send Message"}
                 </button>
+
+                {status === "success" && (
+                  <div className="rounded-lg border border-green-200 bg-green-50 p-4">
+                    <p className="text-sm font-medium text-green-800">
+                      Thank you for reaching out! We&apos;ll get back to you within 24 hours.
+                    </p>
+                  </div>
+                )}
+                {status === "error" && (
+                  <div className="rounded-lg border border-red-200 bg-red-50 p-4">
+                    <p className="text-sm text-red-700">{errorMsg}</p>
+                  </div>
+                )}
               </form>
             </div>
           </div>

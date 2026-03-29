@@ -13,12 +13,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    console.log("[contact] Received submission:", { name, email, phone });
+
     const result = await sendContactMessage({
       name,
       email,
       phone: phone || "",
       message,
     });
+
+    console.log("[contact] sendContactMessage result:", result);
 
     if (!result.success) {
       return NextResponse.json(
