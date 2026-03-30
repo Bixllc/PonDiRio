@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Instagram, Mail, Phone } from "lucide-react";
 
 export default function Footer() {
@@ -122,24 +123,24 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-6">Policies</h3>
             <ul className="space-y-4 text-gray-300 text-sm">
               <li>
-                <a href="#" className="hover:text-white transition-colors">
+                <Link href="/privacy-policy" className="hover:text-white transition-colors">
                   Privacy Policy
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-white transition-colors">
+                <Link href="/terms-and-conditions" className="hover:text-white transition-colors">
                   Terms &amp; Conditions
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-white transition-colors">
+                <Link href="/cancellation-policy" className="hover:text-white transition-colors">
                   Cancellation Policy
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#faq" className="hover:text-white transition-colors">
+                <Link href="/faq" className="hover:text-white transition-colors">
                   FAQ
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -196,6 +197,23 @@ export default function Footer() {
               </span>
             </div>
             <span>St Mary, Jamaica</span>
+          </div>
+
+          {/* Payment logos */}
+          <div className="flex items-center justify-center gap-6 mt-6 opacity-60">
+            {/* Visa */}
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 500" className="h-6 w-auto" aria-label="Visa">
+              <rect width="780" height="500" rx="40" fill="#1A1F71" />
+              <path d="M293.2 348.7l33.4-195.8h53.4l-33.4 195.8zM540.7 157.3c-10.5-4-27.1-8.3-47.7-8.3-52.6 0-89.7 26.5-89.9 64.5-.3 28.1 26.4 43.7 46.6 53.1 20.7 9.6 27.7 15.7 27.6 24.3-.1 13.1-16.6 19.1-31.9 19.1-21.3 0-32.6-3-50.2-10.2l-6.9-3.1-7.5 43.8c12.5 5.5 35.5 10.2 59.4 10.5 56 0 92.3-26.2 92.7-66.8.2-22.3-14-39.2-44.6-53.2-18.6-9.1-30-15.1-29.9-24.3 0-8.1 9.6-16.8 30.4-16.8 17.4-.3 30 3.5 39.8 7.5l4.8 2.2 7.3-42.3zM636.5 152.9h-41.2c-12.8 0-22.3 3.5-27.9 16.2l-79.2 179.6h56l11.2-29.4h68.4l6.5 29.4h49.4l-43.2-195.8zm-65.8 126.4c4.4-11.3 21.4-54.8 21.4-54.8-.3.5 4.4-11.4 7.1-18.8l3.6 17s10.3 47 12.4 56.6h-44.5zM232.1 152.9l-52.2 133.5-5.6-27.1c-9.7-31.2-39.9-65.1-73.7-82l47.8 171.2h56.4l83.8-195.6h-56.5z" fill="#fff" />
+              <path d="M124.6 152.9H38.2l-.6 3.6c66.9 16.2 111.2 55.4 129.6 102.4l-18.7-90.1c-3.2-12.4-12.7-15.5-24.9-15.9z" fill="#F9A533" />
+            </svg>
+            {/* Mastercard */}
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 500" className="h-6 w-auto" aria-label="Mastercard">
+              <rect width="780" height="500" rx="40" fill="#252525" />
+              <circle cx="330" cy="250" r="140" fill="#EB001B" />
+              <circle cx="450" cy="250" r="140" fill="#F79E1B" />
+              <path d="M390 143.6c34.5 27.8 56.6 70.1 56.6 117.4s-22.1 89.6-56.6 117.4c-34.5-27.8-56.6-70.1-56.6-117.4s22.1-89.6 56.6-117.4z" fill="#FF5F00" />
+            </svg>
           </div>
         </div>
       </div>

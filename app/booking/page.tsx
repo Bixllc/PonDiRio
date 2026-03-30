@@ -479,8 +479,63 @@ function BookingPageContent() {
             <input type="hidden" {...register("checkIn", { required: "Check-in is required" })} />
             <input type="hidden" {...register("checkOut", { required: "Check-out is required" })} />
 
+            {/* Villa */}
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium text-[#1a1a2e]">
+                Villa <span className="text-[#C8940A]">*</span>
+              </label>
+              <div className="relative">
+                <Home className={iconCls} />
+                <select
+                  {...register("villa", { required: "Please select a villa" })}
+                  value={watch("villa") || ""}
+                  onChange={(e) => {
+                    const villa = villas.find((v) => v.id === e.target.value) || null;
+                    setSelectedVilla(villa);
+                    setValue("villa", e.target.value, { shouldValidate: true });
+                    // Reset dates when villa changes
+                    handleRangeSelect(undefined);
+                  }}
+                  className={`${inputCls} appearance-none`}
+                >
+                  <option value="">Select a villa</option>
+                  {villas.map((v) => (
+                    <option key={v.id} value={v.id}>
+                      {v.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {errors.villa && (
+                <p className="text-xs text-red-500">{errors.villa.message}</p>
+              )}
+            </div>
+
+            {/* Guests */}
+            <div className="mt-5 space-y-1.5">
+              <label className="text-sm font-medium text-[#1a1a2e]">
+                Number of Guests
+              </label>
+              <div className="relative">
+                <Users className={iconCls} />
+                <select
+                  {...register("guests", { required: "Please select guests" })}
+                  className={`${inputCls} appearance-none`}
+                >
+                  {[1, 2, 3, 4, 5, 6].map((n) => (
+                    <option key={n} value={n}>
+                      {n} {n === 1 ? "Guest" : "Guests"}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {errors.guests && (
+                <p className="text-xs text-red-500">{errors.guests.message}</p>
+              )}
+            </div>
+
             {/* Date range picker */}
-            <div className="rdp-gold flex justify-center">
+            <div className="mt-6 rdp-gold flex justify-center">
               <DayPicker
                 mode="range"
                 selected={selectedRange}
@@ -531,61 +586,6 @@ function BookingPageContent() {
             {errors.checkOut && !checkOut && (
               <p className="mt-2 text-xs text-red-500">{errors.checkOut.message}</p>
             )}
-
-            {/* Guests */}
-            <div className="mt-5 space-y-1.5">
-              <label className="text-sm font-medium text-[#1a1a2e]">
-                Number of Guests
-              </label>
-              <div className="relative">
-                <Users className={iconCls} />
-                <select
-                  {...register("guests", { required: "Please select guests" })}
-                  className={`${inputCls} appearance-none`}
-                >
-                  {[1, 2, 3, 4, 5, 6].map((n) => (
-                    <option key={n} value={n}>
-                      {n} {n === 1 ? "Guest" : "Guests"}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              {errors.guests && (
-                <p className="text-xs text-red-500">{errors.guests.message}</p>
-              )}
-            </div>
-
-            {/* Villa */}
-            <div className="mt-5 space-y-1.5">
-              <label className="text-sm font-medium text-[#1a1a2e]">
-                Villa <span className="text-[#C8940A]">*</span>
-              </label>
-              <div className="relative">
-                <Home className={iconCls} />
-                <select
-                  {...register("villa", { required: "Please select a villa" })}
-                  value={watch("villa") || ""}
-                  onChange={(e) => {
-                    const villa = villas.find((v) => v.id === e.target.value) || null;
-                    setSelectedVilla(villa);
-                    setValue("villa", e.target.value, { shouldValidate: true });
-                    // Reset dates when villa changes
-                    handleRangeSelect(undefined);
-                  }}
-                  className={`${inputCls} appearance-none`}
-                >
-                  <option value="">Select a villa</option>
-                  {villas.map((v) => (
-                    <option key={v.id} value={v.id}>
-                      {v.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              {errors.villa && (
-                <p className="text-xs text-red-500">{errors.villa.message}</p>
-              )}
-            </div>
 
             {/* Availability feedback */}
             <div className="mt-4 h-5">
@@ -711,6 +711,29 @@ function BookingPageContent() {
             <p className="mt-3 text-center text-xs text-gray-400">
               You&apos;ll be redirected to our secure payment page
             </p>
+
+            {/* Payment logos */}
+            <div className="mt-4 flex items-center justify-center gap-4">
+              {/* Visa */}
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 500" className="h-7 w-auto" aria-label="Visa">
+                <rect width="780" height="500" rx="40" fill="#1A1F71" />
+                <path d="M293.2 348.7l33.4-195.8h53.4l-33.4 195.8zM540.7 157.3c-10.5-4-27.1-8.3-47.7-8.3-52.6 0-89.7 26.5-89.9 64.5-.3 28.1 26.4 43.7 46.6 53.1 20.7 9.6 27.7 15.7 27.6 24.3-.1 13.1-16.6 19.1-31.9 19.1-21.3 0-32.6-3-50.2-10.2l-6.9-3.1-7.5 43.8c12.5 5.5 35.5 10.2 59.4 10.5 56 0 92.3-26.2 92.7-66.8.2-22.3-14-39.2-44.6-53.2-18.6-9.1-30-15.1-29.9-24.3 0-8.1 9.6-16.8 30.4-16.8 17.4-.3 30 3.5 39.8 7.5l4.8 2.2 7.3-42.3zM636.5 152.9h-41.2c-12.8 0-22.3 3.5-27.9 16.2l-79.2 179.6h56l11.2-29.4h68.4l6.5 29.4h49.4l-43.2-195.8zm-65.8 126.4c4.4-11.3 21.4-54.8 21.4-54.8-.3.5 4.4-11.4 7.1-18.8l3.6 17s10.3 47 12.4 56.6h-44.5zM232.1 152.9l-52.2 133.5-5.6-27.1c-9.7-31.2-39.9-65.1-73.7-82l47.8 171.2h56.4l83.8-195.6h-56.5z" fill="#fff" />
+                <path d="M124.6 152.9H38.2l-.6 3.6c66.9 16.2 111.2 55.4 129.6 102.4l-18.7-90.1c-3.2-12.4-12.7-15.5-24.9-15.9z" fill="#F9A533" />
+              </svg>
+              {/* Mastercard */}
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 500" className="h-7 w-auto" aria-label="Mastercard">
+                <rect width="780" height="500" rx="40" fill="#252525" />
+                <circle cx="330" cy="250" r="140" fill="#EB001B" />
+                <circle cx="450" cy="250" r="140" fill="#F79E1B" />
+                <path d="M390 143.6c34.5 27.8 56.6 70.1 56.6 117.4s-22.1 89.6-56.6 117.4c-34.5-27.8-56.6-70.1-56.6-117.4s22.1-89.6 56.6-117.4z" fill="#FF5F00" />
+              </svg>
+              {/* PowerTranz logo */}
+              <img
+                src="/powered-by-powertranz.jpg"
+                alt="Powered by PowerTranz"
+                className="h-7 w-auto"
+              />
+            </div>
           </div>
         </div>
       </form>

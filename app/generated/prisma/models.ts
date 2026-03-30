@@ -8,10 +8,10 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/Villa.js'
-export type * from './models/Booking.js'
-export type * from './models/AvailabilityBlock.js'
-export type * from './models/Payment.js'
-export type * from './models/ExternalCalendarFeed.js'
-export type * from './models/ExternalCalendarEvent.js'
-export type * from './commonInputTypes.js'
+export type * from './models/Villa'
+export type * from './models/Booking'
+export type * from './models/AvailabilityBlock'
+export type * from './models/Payment'
+export type * from './models/ExternalCalendarFeed'
+export type * from './models/ExternalCalendarEvent'
+export type * from './commonInputTypes'

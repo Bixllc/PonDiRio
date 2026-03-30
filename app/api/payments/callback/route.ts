@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     if (result.success) {
       // Redirect to booking confirmation page
       const confirmUrl = new URL(
-        `/booking/confirmed?id=${result.bookingId}`,
+        `/booking/confirmation?bookingId=${result.bookingId}`,
         request.url,
       );
       return NextResponse.redirect(confirmUrl, 303);

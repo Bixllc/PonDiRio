@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { devConfirmPayment } from "@/app/actions/dev";
 
 export function DevConfirmButton({ bookingId }: { bookingId: string }) {
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const router = useRouter();
+  const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const [message, setMessage] = useState("");
 
   async function handleConfirm() {
@@ -12,8 +14,7 @@ export function DevConfirmButton({ bookingId }: { bookingId: string }) {
     try {
       const result = await devConfirmPayment(bookingId);
       if (result.success) {
-        setStatus("success");
-        setMessage(`Booking ${bookingId} confirmed! Dates blocked, payment marked success.`);
+        router.push(`/booking/confirmation?bookingId=${bookingId}`);
       } else {
         setStatus("error");
         setMessage(result.error || "Failed to confirm");
@@ -36,14 +37,6 @@ export function DevConfirmButton({ bookingId }: { bookingId: string }) {
       )}
       {status === "loading" && (
         <p className="text-sm text-gray-500">Processing...</p>
-      )}
-      {status === "success" && (
-        <div className="rounded-md border border-green-200 bg-green-50 p-4">
-          <p className="text-sm font-medium text-green-800">{message}</p>
-          <a href="/admin/bookings" className="mt-2 inline-block text-sm text-green-700 underline">
-            View in admin
-          </a>
-        </div>
       )}
       {status === "error" && (
         <div className="rounded-md border border-red-200 bg-red-50 p-4">
