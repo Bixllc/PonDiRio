@@ -1,7 +1,11 @@
 import { Resend } from "resend";
 import { prisma } from "./prisma";
 
-export const resend = new Resend(process.env.RESEND_API_KEY);
+let _resend: Resend | null = null;
+export function getResend() {
+  if (!_resend) _resend = new Resend(process.env.RESEND_API_KEY);
+  return _resend;
+}
 
 const FROM_ADDRESS = "Pon Di Rio <onboarding@resend.dev>";
 
@@ -112,7 +116,7 @@ export async function sendBookingConfirmation(
 </body>
 </html>`.trim();
 
-    const { error } = await resend.emails.send({
+    const { error } = await getResend().emails.send({
       from: FROM_ADDRESS,
       to: booking.guestEmail,
       subject: `Booking Confirmed — ${booking.villa.name}`,
@@ -215,7 +219,7 @@ export async function sendContactMessage(
 </html>`.trim();
 
     // TODO: Change to "info@pondirio.com" once domain is verified in Resend
-    const { data, error } = await resend.emails.send({
+    const { data, error } = await getResend().emails.send({
       from: FROM_ADDRESS,
       to: "onboarding@resend.dev",
       replyTo: input.email,

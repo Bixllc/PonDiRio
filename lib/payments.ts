@@ -98,7 +98,7 @@ export async function initiatePayment(
   }
 
   const fac = getFacConfig();
-  const currencyCode = CURRENCY_CODES[booking.currency] || CURRENCY_CODES.XCD;
+  const currencyCode = CURRENCY_CODES[booking.currency] || CURRENCY_CODES.USD;
   const transactionId = randomUUID();
   const nameParts = booking.guestName.trim().split(/\s+/);
   const firstName = nameParts[0] || "";

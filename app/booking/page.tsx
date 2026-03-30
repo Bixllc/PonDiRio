@@ -564,6 +564,7 @@ function BookingPageContent() {
                 <Home className={iconCls} />
                 <select
                   {...register("villa", { required: "Please select a villa" })}
+                  value={watch("villa") || ""}
                   onChange={(e) => {
                     const villa = villas.find((v) => v.id === e.target.value) || null;
                     setSelectedVilla(villa);

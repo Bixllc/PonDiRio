@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { resend } from "@/lib/email";
+import { getResend } from "@/lib/email";
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { error } = await resend.contacts.create({
+    const { error } = await getResend().contacts.create({
       audienceId,
       email,
     });
