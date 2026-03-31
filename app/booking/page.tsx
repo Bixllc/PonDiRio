@@ -298,7 +298,36 @@ function BookingPageContent() {
     if (paymentResult.redirectHtml) {
       console.log("[FAC] RedirectData length:", paymentResult.redirectHtml.length);
       console.log("[FAC] RedirectData preview:", paymentResult.redirectHtml.substring(0, 500));
-      setFacHtml(paymentResult.redirectHtml);
+
+      // Inject browser data into the 3DS form before it auto-submits.
+      // PowerTranz sends hidden fields for browser info but leaves them empty —
+      // the merchant is expected to populate them client-side.
+      const browserScript = `<script>
+(function() {
+  var fields = {
+    browserLanguage: navigator.language || navigator.userLanguage || 'en-US',
+    browserColorDepth: String(screen.colorDepth || 24),
+    browserScreenWidth: String(screen.width),
+    browserScreenHeight: String(screen.height),
+    browserWidth: String(window.innerWidth || document.documentElement.clientWidth),
+    browserHeight: String(window.innerHeight || document.documentElement.clientHeight),
+    browserTimeZone: String(new Date().getTimezoneOffset()),
+    browserJavaEnabled: 'false',
+    browserJavascriptEnabled: 'true'
+  };
+  for (var name in fields) {
+    var el = document.getElementById(name);
+    if (el) el.value = fields[name];
+  }
+})();
+</script>`;
+
+      const enrichedHtml = paymentResult.redirectHtml.replace(
+        '</body>',
+        browserScript + '</body>'
+      );
+
+      setFacHtml(enrichedHtml);
     } else {
       console.error("[FAC] Payment succeeded but no redirectHtml or redirectUrl returned!");
       setSubmitError("Payment session created but no redirect data received. Please try again.");
