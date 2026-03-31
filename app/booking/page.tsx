@@ -63,7 +63,6 @@ function BookingPageContent() {
   const [availability, setAvailability] = useState<AvailabilityStatus>({ state: "idle" });
   const [submitError, setSubmitError] = useState("");
   const [pricePerNight, setPricePerNight] = useState<number | null>(null);
-  const [facHtml, setFacHtml] = useState<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
   // Villa state
@@ -294,48 +293,59 @@ function BookingPageContent() {
       return;
     }
 
-    // Prod: render FAC hosted page HTML in an iframe
+    // Prod: parse RedirectData HTML, build a real form, and submit directly.
+    // No iframe needed — the callback redirect works as a normal navigation.
     if (paymentResult.redirectHtml) {
       console.log("[FAC] RedirectData length:", paymentResult.redirectHtml.length);
-      console.log("[FAC] RedirectData preview:", paymentResult.redirectHtml.substring(0, 500));
 
-      // Inject browser data into the 3DS form before it auto-submits.
-      // PowerTranz sends hidden fields for browser info but leaves them empty —
-      // the merchant is expected to populate them client-side.
-      const browserScript = `<script>
-(function() {
-  var fields = {
-    browserLanguage: navigator.language || navigator.userLanguage || 'en-US',
-    browserColorDepth: String(screen.colorDepth || 24),
-    browserScreenWidth: String(screen.width),
-    browserScreenHeight: String(screen.height),
-    browserWidth: String(window.innerWidth || document.documentElement.clientWidth),
-    browserHeight: String(window.innerHeight || document.documentElement.clientHeight),
-    browserTimeZone: String(new Date().getTimezoneOffset()),
-    browserJavaEnabled: 'false',
-    browserJavascriptEnabled: 'true'
-  };
-  for (var name in fields) {
-    var el = document.getElementById(name);
-    if (el) el.value = fields[name];
-  }
-})();
-</script>`;
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(paymentResult.redirectHtml, "text/html");
+      const srcForm = doc.querySelector("form");
 
-      let enrichedHtml = paymentResult.redirectHtml;
-      if (enrichedHtml.includes('</body>')) {
-        enrichedHtml = enrichedHtml.replace('</body>', browserScript + '</body>');
-      } else if (enrichedHtml.includes('</html>')) {
-        enrichedHtml = enrichedHtml.replace('</html>', browserScript + '</html>');
-      } else {
-        // No closing tag at all — just append the script
-        enrichedHtml = enrichedHtml + browserScript;
+      if (!srcForm || !srcForm.action) {
+        console.error("[FAC] Could not parse form from RedirectData");
+        setSubmitError("Payment session error. Please try again.");
+        return;
       }
 
-      console.log("[FAC] Enriched HTML length:", enrichedHtml.length);
-      console.log("[FAC] Script injected:", enrichedHtml.length > paymentResult.redirectHtml.length);
+      // Build a real form on the page with all hidden fields from RedirectData
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = srcForm.action;
+      form.style.display = "none";
 
-      setFacHtml(enrichedHtml);
+      const inputs = srcForm.querySelectorAll("input");
+      inputs.forEach((input) => {
+        const hidden = document.createElement("input");
+        hidden.type = "hidden";
+        hidden.name = input.name;
+        hidden.value = input.value;
+        form.appendChild(hidden);
+      });
+
+      // Fill in browser fields that PowerTranz leaves empty
+      const browserFields: Record<string, string> = {
+        browserLanguage: navigator.language || "en-US",
+        browserColorDepth: String(screen.colorDepth || 24),
+        browserScreenWidth: String(screen.width),
+        browserScreenHeight: String(screen.height),
+        browserWidth: String(window.innerWidth || document.documentElement.clientWidth),
+        browserHeight: String(window.innerHeight || document.documentElement.clientHeight),
+        browserTimeZone: String(new Date().getTimezoneOffset()),
+        browserJavaEnabled: "false",
+        browserJavascriptEnabled: "true",
+      };
+
+      for (const [name, value] of Object.entries(browserFields)) {
+        const el = form.querySelector<HTMLInputElement>(`input[name="${name}"]`);
+        if (el) {
+          el.value = value;
+        }
+      }
+
+      console.log("[FAC] Submitting form to:", form.action);
+      document.body.appendChild(form);
+      form.submit();
     } else {
       console.error("[FAC] Payment succeeded but no redirectHtml or redirectUrl returned!");
       setSubmitError("Payment session created but no redirect data received. Please try again.");
@@ -347,19 +357,6 @@ function BookingPageContent() {
     "h-12 w-full rounded-lg border border-gray-200 bg-white pl-11 pr-4 text-sm text-[#1a1a2e] outline-none transition placeholder:text-gray-400 focus:border-[#C8940A]/50 focus:ring-2 focus:ring-[#C8940A]/20";
   const iconCls = "absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400";
 
-  // If FAC redirect is active, show only the iframe
-  if (facHtml) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-[#F5F1E8]">
-        <iframe
-          title="Payment"
-          srcDoc={facHtml}
-          className="h-screen w-full max-w-2xl border-0"
-          sandbox="allow-scripts allow-forms allow-top-navigation"
-        />
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen font-sans">
