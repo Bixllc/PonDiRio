@@ -122,10 +122,11 @@ export async function initiatePayment(
     },
     ExtendedData: {
       MerchantResponseUrl: "https://pon-di-rio.vercel.app/api/payments/callback",
-      HostedPage: {
-        PageSet: fac.pageSet,
-        PageName: fac.pageName,
-      },
+      // HostedPage omitted — use PowerTranz default page to test
+      // HostedPage: {
+      //   PageSet: fac.pageSet,
+      //   PageName: fac.pageName,
+      // },
       ThreeDSecure: {
         ChallengeWindowSize: 4,
         ChallengeIndicator: "01",
