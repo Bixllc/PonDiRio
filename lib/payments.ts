@@ -133,17 +133,49 @@ export async function initiatePayment(
     },
   };
 
-  const response = await fetch(`${fac.baseUrl}/spi/sale`, {
+  const requestUrl = `${fac.baseUrl}/spi/sale`;
+  const headers = facHeaders(fac);
+
+  console.log("[FAC] ── Request ──────────────────────────────");
+  console.log("[FAC] URL:", requestUrl);
+  console.log("[FAC] Headers:", JSON.stringify({
+    ...headers,
+    "PowerTranz-PowerTranzPassword": headers["PowerTranz-PowerTranzPassword"].slice(0, 6) + "…",
+  }, null, 2));
+  console.log("[FAC] Body:", JSON.stringify(payload, null, 2));
+  console.log("[FAC] Env check:", {
+    FAC_BASE_URL: fac.baseUrl,
+    FAC_MERCHANT_ID: fac.merchantId,
+    FAC_PROCESSING_PASSWORD: fac.processingPassword ? `${fac.processingPassword.slice(0, 6)}…(${fac.processingPassword.length} chars)` : "MISSING",
+    FAC_PAGE_SET: fac.pageSet || "EMPTY",
+    FAC_PAGE_NAME: fac.pageName || "EMPTY",
+  });
+
+  const response = await fetch(requestUrl, {
     method: "POST",
-    headers: facHeaders(fac),
+    headers,
     body: JSON.stringify(payload),
   });
 
+  const responseText = await response.text();
+  console.log("[FAC] ── Response ─────────────────────────────");
+  console.log("[FAC] Status:", response.status, response.statusText);
+  console.log("[FAC] Response body:", responseText);
+
   if (!response.ok) {
-    return { success: false, error: `FAC request failed: ${response.status}` };
+    return { success: false, error: `FAC request failed: ${response.status} — ${responseText}` };
   }
 
-  const data = await response.json();
+  let data: Record<string, unknown>;
+  try {
+    data = JSON.parse(responseText);
+  } catch {
+    return { success: false, error: `FAC returned non-JSON: ${responseText.slice(0, 200)}` };
+  }
+
+  console.log("[FAC] IsoResponseCode:", data.IsoResponseCode);
+  console.log("[FAC] ResponseMessage:", data.ResponseMessage);
+  console.log("[FAC] Has RedirectData:", !!data.RedirectData);
 
   // SP4 = hosted page session created
   if (data.IsoResponseCode !== "SP4" || !data.RedirectData) {
