@@ -43,7 +43,6 @@ type AvailabilityStatus =
 function BookingPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const facIframeRef = useRef<HTMLIFrameElement>(null);
 
   const {
     register,
@@ -64,7 +63,7 @@ function BookingPageContent() {
   const [availability, setAvailability] = useState<AvailabilityStatus>({ state: "idle" });
   const [submitError, setSubmitError] = useState("");
   const [pricePerNight, setPricePerNight] = useState<number | null>(null);
-  const [showFacRedirect, setShowFacRedirect] = useState(false);
+  const [facHtml, setFacHtml] = useState<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
   // Villa state
@@ -287,10 +286,11 @@ function BookingPageContent() {
       return;
     }
 
-    // Prod: render FAC hosted page HTML in a sandboxed iframe
-    if (paymentResult.redirectHtml && facIframeRef.current) {
-      facIframeRef.current.srcdoc = paymentResult.redirectHtml;
-      setShowFacRedirect(true);
+    // Prod: render FAC hosted page HTML in an iframe
+    if (paymentResult.redirectHtml) {
+      console.log("[FAC] RedirectData length:", paymentResult.redirectHtml.length);
+      console.log("[FAC] RedirectData preview:", paymentResult.redirectHtml.substring(0, 200));
+      setFacHtml(paymentResult.redirectHtml);
     }
   };
 
@@ -300,12 +300,12 @@ function BookingPageContent() {
   const iconCls = "absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400";
 
   // If FAC redirect is active, show only the iframe
-  if (showFacRedirect) {
+  if (facHtml) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#F5F1E8]">
         <iframe
-          ref={facIframeRef}
           title="Payment"
+          srcDoc={facHtml}
           className="h-screen w-full max-w-2xl border-0"
           sandbox="allow-scripts allow-forms allow-same-origin allow-top-navigation"
         />
@@ -315,9 +315,6 @@ function BookingPageContent() {
 
   return (
     <div className="min-h-screen font-sans">
-      {/* Hidden iframe for FAC (pre-mounted so ref is ready) */}
-      <iframe ref={facIframeRef} title="Payment" className="hidden" />
-
       {/* Header */}
       <div className="border-b bg-white px-6 py-4">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
