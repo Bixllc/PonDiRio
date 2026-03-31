@@ -216,6 +216,10 @@ export async function verifyFacCallback(
   responseJson: string,
 ): Promise<VerifyResult> {
   const authResponse = JSON.parse(responseJson);
+  console.log("[FAC Verify] Full callback payload:", responseJson);
+  console.log("[FAC Verify] IsoResponseCode:", authResponse.IsoResponseCode,
+    "| SpiToken:", !!authResponse.SpiToken,
+    "| ResponseMessage:", authResponse.ResponseMessage);
   const bookingId = authResponse.OrderIdentifier as string | undefined;
 
   if (!bookingId) {
