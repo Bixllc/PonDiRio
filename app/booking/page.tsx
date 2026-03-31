@@ -275,6 +275,14 @@ function BookingPageContent() {
     // 2. Initiate payment
     const paymentResult = await initiateBookingPayment(bookingJson.data.bookingId);
 
+    console.log("[Booking] paymentResult:", JSON.stringify({
+      success: paymentResult.success,
+      error: paymentResult.error,
+      hasRedirectHtml: !!paymentResult.redirectHtml,
+      redirectHtmlLength: paymentResult.redirectHtml?.length || 0,
+      hasRedirectUrl: !!paymentResult.redirectUrl,
+    }));
+
     if (!paymentResult.success) {
       setSubmitError(paymentResult.error || "Failed to initiate payment");
       return;
@@ -289,8 +297,11 @@ function BookingPageContent() {
     // Prod: render FAC hosted page HTML in an iframe
     if (paymentResult.redirectHtml) {
       console.log("[FAC] RedirectData length:", paymentResult.redirectHtml.length);
-      console.log("[FAC] RedirectData preview:", paymentResult.redirectHtml.substring(0, 200));
+      console.log("[FAC] RedirectData preview:", paymentResult.redirectHtml.substring(0, 500));
       setFacHtml(paymentResult.redirectHtml);
+    } else {
+      console.error("[FAC] Payment succeeded but no redirectHtml or redirectUrl returned!");
+      setSubmitError("Payment session created but no redirect data received. Please try again.");
     }
   };
 

@@ -6,6 +6,13 @@ import { initiatePayment } from "@/lib/payments";
 export async function initiateBookingPayment(bookingId: string) {
   const result = await initiatePayment(bookingId);
 
+  console.log("[initiateBookingPayment] bookingId:", bookingId);
+  console.log("[initiateBookingPayment] success:", result.success);
+  console.log("[initiateBookingPayment] error:", result.error || "none");
+  console.log("[initiateBookingPayment] hasRedirectHtml:", !!result.redirectHtml);
+  console.log("[initiateBookingPayment] redirectHtml length:", result.redirectHtml?.length || 0);
+  console.log("[initiateBookingPayment] redirectHtml preview:", result.redirectHtml?.substring(0, 300) || "empty");
+
   return {
     success: result.success,
     redirectHtml: result.redirectHtml,
