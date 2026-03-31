@@ -48,7 +48,6 @@ interface InitiateResult {
 
 export async function initiatePayment(
   bookingId: string,
-  callbackUrl: string,
 ): Promise<InitiateResult> {
   // Load booking
   const booking = await prisma.booking.findUnique({
@@ -110,6 +109,7 @@ export async function initiatePayment(
     CurrencyCode: currencyCode,
     ThreeDSecure: true,
     OrderIdentifier: booking.id,
+    AddressMatch: false,
     BillingAddress: {
       FirstName: firstName,
       LastName: lastName,
@@ -121,7 +121,7 @@ export async function initiatePayment(
       CountryCode: currencyCode,
     },
     ExtendedData: {
-      MerchantResponseUrl: callbackUrl,
+      MerchantResponseUrl: "https://pon-di-rio.vercel.app/api/payments/callback",
       HostedPage: {
         PageSet: fac.pageSet,
         PageName: fac.pageName,
