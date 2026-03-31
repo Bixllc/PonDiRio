@@ -23,8 +23,8 @@ function getFacConfig() {
     baseUrl: requireEnv("FAC_BASE_URL"),
     merchantId: requireEnv("FAC_MERCHANT_ID"),
     processingPassword: requireEnv("FAC_PROCESSING_PASSWORD"),
-    pageSet: process.env.FAC_PAGE_SET || "",
-    pageName: process.env.FAC_PAGE_NAME || "",
+    pageSet: (process.env.FAC_PAGE_SET || "").trim(),
+    pageName: (process.env.FAC_PAGE_NAME || "").trim(),
   };
 }
 
@@ -147,8 +147,8 @@ export async function initiatePayment(
     FAC_BASE_URL: fac.baseUrl,
     FAC_MERCHANT_ID: fac.merchantId,
     FAC_PROCESSING_PASSWORD: fac.processingPassword ? `${fac.processingPassword.slice(0, 6)}…(${fac.processingPassword.length} chars)` : "MISSING",
-    FAC_PAGE_SET: fac.pageSet || "EMPTY",
-    FAC_PAGE_NAME: fac.pageName || "EMPTY",
+    FAC_PAGE_SET: `"${fac.pageSet}" (${fac.pageSet.length} chars)`,
+    FAC_PAGE_NAME: `"${fac.pageName}" (${fac.pageName.length} chars)`,
   });
 
   const response = await fetch(requestUrl, {
