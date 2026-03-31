@@ -181,7 +181,7 @@ export async function initiatePayment(
   if (data.IsoResponseCode !== "SP4" || !data.RedirectData) {
     return {
       success: false,
-      error: data.ResponseMessage || "Failed to create payment session",
+      error: (data.ResponseMessage as string) || "Failed to create payment session",
     };
   }
 
@@ -201,7 +201,7 @@ export async function initiatePayment(
     }),
   ]);
 
-  return { success: true, redirectHtml: data.RedirectData };
+  return { success: true, redirectHtml: data.RedirectData as string };
 }
 
 // ─── Verify Callback ──────────────────────────────────────
