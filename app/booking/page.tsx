@@ -322,10 +322,18 @@ function BookingPageContent() {
 })();
 </script>`;
 
-      const enrichedHtml = paymentResult.redirectHtml.replace(
-        '</body>',
-        browserScript + '</body>'
-      );
+      let enrichedHtml = paymentResult.redirectHtml;
+      if (enrichedHtml.includes('</body>')) {
+        enrichedHtml = enrichedHtml.replace('</body>', browserScript + '</body>');
+      } else if (enrichedHtml.includes('</html>')) {
+        enrichedHtml = enrichedHtml.replace('</html>', browserScript + '</html>');
+      } else {
+        // No closing tag at all — just append the script
+        enrichedHtml = enrichedHtml + browserScript;
+      }
+
+      console.log("[FAC] Enriched HTML length:", enrichedHtml.length);
+      console.log("[FAC] Script injected:", enrichedHtml.length > paymentResult.redirectHtml.length);
 
       setFacHtml(enrichedHtml);
     } else {
@@ -347,7 +355,7 @@ function BookingPageContent() {
           title="Payment"
           srcDoc={facHtml}
           className="h-screen w-full max-w-2xl border-0"
-          sandbox="allow-scripts allow-forms allow-same-origin allow-top-navigation"
+          sandbox="allow-scripts allow-forms allow-top-navigation"
         />
       </div>
     );
