@@ -293,7 +293,7 @@ export async function verifyFacCallback(
     return {
       success: false,
       bookingId,
-      error: result.ResponseMessage || "Payment declined",
+      error: String(result?.ResponseMessage || "Payment declined"),
     };
   }
 
