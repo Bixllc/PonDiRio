@@ -298,7 +298,7 @@ export async function verifyFacCallback(
   }
 
   // Payment succeeded — confirm booking, block dates, update payment record
-  await confirmBooking(bookingId, result.TransactionIdentifier);
+  await confirmBooking(bookingId, String(result.TransactionIdentifier));
 
   // Fire-and-forget: don't let email failure block the booking response
   sendBookingConfirmation(bookingId).catch(() => {});
