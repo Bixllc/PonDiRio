@@ -257,18 +257,36 @@ export async function verifyFacCallback(
   const fac = getFacConfig();
 
   // Complete the charge by posting the SpiToken
-  const completeResponse = await fetch(`${fac.baseUrl}/spi/payment`, {
+  const paymentUrl = `${fac.baseUrl}/spi/payment`;
+  const paymentBody = JSON.stringify(authResponse.SpiToken);
+  console.log("[FAC Payment] ── Request ──────────────────────────────");
+  console.log("[FAC Payment] URL:", paymentUrl);
+  console.log("[FAC Payment] Body:", paymentBody);
+  console.log("[FAC Payment] SpiToken type:", typeof authResponse.SpiToken);
+
+  const completeResponse = await fetch(paymentUrl, {
     method: "POST",
     headers: { "Content-Type": "text/plain" },
-    body: JSON.stringify(authResponse.SpiToken),
+    body: paymentBody,
   });
+
+  const completeResponseText = await completeResponse.text();
+  console.log("[FAC Payment] ── Response ─────────────────────────────");
+  console.log("[FAC Payment] Status:", completeResponse.status, completeResponse.statusText);
+  console.log("[FAC Payment] Body:", completeResponseText);
 
   if (!completeResponse.ok) {
     await markBookingFailed(bookingId);
-    return { success: false, bookingId, error: "Payment completion request failed" };
+    return { success: false, bookingId, error: `Payment completion failed: ${completeResponse.status} — ${completeResponseText.slice(0, 200)}` };
   }
 
-  const result = await completeResponse.json();
+  let result: Record<string, unknown>;
+  try {
+    result = JSON.parse(completeResponseText);
+  } catch {
+    await markBookingFailed(bookingId);
+    return { success: false, bookingId, error: `Payment completion returned non-JSON: ${completeResponseText.slice(0, 200)}` };
+  }
 
   if (result.Approved !== true || result.IsoResponseCode !== "00") {
     await markBookingFailed(bookingId);
