@@ -23,7 +23,7 @@ function getFacConfig() {
     baseUrl: requireEnv("FAC_BASE_URL"),
     merchantId: requireEnv("FAC_MERCHANT_ID"),
     processingPassword: requireEnv("FAC_PROCESSING_PASSWORD"),
-    pageSet: (process.env.FAC_PAGE_SET || "").trim(),
+    pageSet: "PTZ/pondiriver",
     pageName: (process.env.FAC_PAGE_NAME || "").trim(),
   };
 }
