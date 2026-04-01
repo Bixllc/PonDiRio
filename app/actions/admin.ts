@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 
 // ─── Bookings ─────────────────────────────────────────────
@@ -54,7 +55,7 @@ export async function blockDates(
     throw new Error("Start date must be before end date");
   }
 
-  return prisma.availabilityBlock.create({
+  const block = await prisma.availabilityBlock.create({
     data: {
       villaId,
       startDate,
@@ -63,6 +64,9 @@ export async function blockDates(
       source: "INTERNAL",
     },
   });
+  revalidatePath("/admin/availability");
+  revalidatePath("/booking");
+  return block;
 }
 
 export async function unblockDates(blockId: string) {
@@ -79,9 +83,12 @@ export async function unblockDates(blockId: string) {
     throw new Error("Cannot unblock dates tied to a confirmed booking");
   }
 
-  return prisma.availabilityBlock.delete({
+  const deleted = await prisma.availabilityBlock.delete({
     where: { id: blockId },
   });
+  revalidatePath("/admin/availability");
+  revalidatePath("/booking");
+  return deleted;
 }
 
 export async function getAvailabilityBlocks(villaId: string) {
@@ -111,18 +118,23 @@ export async function addCalendarFeed(
   sourceName: string,
   feedUrl: string,
 ) {
-  return prisma.externalCalendarFeed.create({
+  const feed = await prisma.externalCalendarFeed.create({
     data: {
       villaId,
       sourceName,
       feedUrl,
     },
   });
+  revalidatePath("/admin/calendar-feeds");
+  return feed;
 }
 
 export async function triggerCalendarSync() {
   const { syncAllFeeds } = await import("@/lib/calendar");
   const results = await syncAllFeeds();
+  revalidatePath("/admin/calendar-feeds");
+  revalidatePath("/admin/availability");
+  revalidatePath("/booking");
   return results.map((r) => ({
     feedId: r.feedId,
     eventsUpserted: r.eventsUpserted,
@@ -132,8 +144,10 @@ export async function triggerCalendarSync() {
 }
 
 export async function removeCalendarFeed(feedId: string) {
-  return prisma.externalCalendarFeed.update({
+  const feed = await prisma.externalCalendarFeed.update({
     where: { id: feedId },
     data: { isActive: false },
   });
+  revalidatePath("/admin/calendar-feeds");
+  return feed;
 }

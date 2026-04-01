@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 import { getAvailabilityBlocks } from "@/app/actions/admin";
 import { BlockDatesForm } from "./BlockDatesForm";
 import { RemoveBlockButton } from "./RemoveBlockButton";

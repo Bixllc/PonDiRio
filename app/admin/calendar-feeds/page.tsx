@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 import { getCalendarFeeds } from "@/app/actions/admin";
 import { AddFeedForm } from "./AddFeedForm";
 import { RemoveFeedButton } from "./RemoveFeedButton";
