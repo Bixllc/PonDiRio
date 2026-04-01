@@ -266,7 +266,7 @@ export async function verifyFacCallback(
 
   const completeResponse = await fetch(paymentUrl, {
     method: "POST",
-    headers: { "Content-Type": "text/plain" },
+    headers: { "Content-Type": "application/json" },
     body: paymentBody,
   });
 
