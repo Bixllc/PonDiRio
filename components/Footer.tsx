@@ -77,7 +77,7 @@ export default function Footer() {
                 <Instagram size={20} />
               </a>
               <a
-                href="mailto:info@pondirio.com"
+                href="mailto:pondiriocottages@gmail.com"
                 className="w-11 h-11 rounded-full border-2 border-amber-500 bg-amber-500 flex items-center justify-center text-black hover:bg-amber-400 hover:border-amber-400 transition-colors"
               >
                 <Mail size={20} />

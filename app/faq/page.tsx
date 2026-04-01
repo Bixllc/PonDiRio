@@ -85,7 +85,7 @@ const faqs = [
       },
       {
         q: "Can I change my booking dates?",
-        a: "Date changes are subject to availability and should be requested at least 14 days before your original check-in date. Please contact us at info@pondirio.com with your booking details and preferred new dates.",
+        a: "Date changes are subject to availability and should be requested at least 14 days before your original check-in date. Please contact us at pondiriocottages@gmail.com with your booking details and preferred new dates.",
       },
       {
         q: "How long do refunds take to process?",

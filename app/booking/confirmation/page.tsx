@@ -145,10 +145,10 @@ export default async function BookingConfirmationPage({
             booking details and pre-arrival information. If you have any
             questions, please contact us at{" "}
             <a
-              href="mailto:info@pondirio.com"
+              href="mailto:pondiriocottages@gmail.com"
               className="text-amber-700 underline hover:text-amber-600"
             >
-              info@pondirio.com
+              pondiriocottages@gmail.com
             </a>
             .
           </p>

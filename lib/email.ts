@@ -218,7 +218,7 @@ export async function sendContactMessage(
 </body>
 </html>`.trim();
 
-    // TODO: Change to "info@pondirio.com" once domain is verified in Resend
+    // TODO: Change to "pondiriocottages@gmail.com" once domain is verified in Resend
     const { data, error } = await getResend().emails.send({
       from: FROM_ADDRESS,
       to: "onboarding@resend.dev",

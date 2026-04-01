@@ -251,10 +251,10 @@ export default function TermsAndConditionsPage() {
             <p className="text-gray-700 leading-relaxed">
               If you have any questions about these terms, please contact us at{" "}
               <a
-                href="mailto:info@pondirio.com"
+                href="mailto:pondiriocottages@gmail.com"
                 className="text-amber-700 underline hover:text-amber-600"
               >
-                info@pondirio.com
+                pondiriocottages@gmail.com
               </a>
               .
             </p>

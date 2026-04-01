@@ -43,10 +43,10 @@ export default function CancellationPolicyPage() {
               review the terms below carefully before making your reservation.
               All cancellation requests must be submitted in writing via email to{" "}
               <a
-                href="mailto:info@pondirio.com"
+                href="mailto:pondiriocottages@gmail.com"
                 className="text-amber-700 underline hover:text-amber-600"
               >
-                info@pondirio.com
+                pondiriocottages@gmail.com
               </a>
               .
             </p>
@@ -186,10 +186,10 @@ export default function CancellationPolicyPage() {
             <p className="text-gray-700 leading-relaxed">
               For cancellation or modification requests, please email us at{" "}
               <a
-                href="mailto:info@pondirio.com"
+                href="mailto:pondiriocottages@gmail.com"
                 className="text-amber-700 underline hover:text-amber-600"
               >
-                info@pondirio.com
+                pondiriocottages@gmail.com
               </a>{" "}
               with your booking confirmation number and the reason for your
               request.

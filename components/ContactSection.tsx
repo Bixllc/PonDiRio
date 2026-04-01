@@ -62,8 +62,8 @@ export default function ContactSection() {
     {
       icon: <Mail className="h-5 w-5" />,
       label: "Email",
-      value: "info@pondirio.com",
-      link: "mailto:info@pondirio.com",
+      value: "pondiriocottages@gmail.com",
+      link: "mailto:pondiriocottages@gmail.com",
     },
     {
       icon: <Phone className="h-5 w-5" />,

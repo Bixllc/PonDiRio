@@ -221,10 +221,10 @@ export default function PrivacyPolicyPage() {
               If you have any questions about this Privacy Policy or wish to
               exercise your rights, please contact us at{" "}
               <a
-                href="mailto:info@pondirio.com"
+                href="mailto:pondiriocottages@gmail.com"
                 className="text-amber-700 underline hover:text-amber-600"
               >
-                info@pondirio.com
+                pondiriocottages@gmail.com
               </a>
               .
             </p>

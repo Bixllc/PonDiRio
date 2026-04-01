@@ -90,7 +90,7 @@ export default function ContactPage() {
                   >
                     Email
                   </h3>
-                  <p className="text-gray-700 text-base">info@pondirio.com</p>
+                  <p className="text-gray-700 text-base">pondiriocottages@gmail.com</p>
                 </div>
 
                 <div>

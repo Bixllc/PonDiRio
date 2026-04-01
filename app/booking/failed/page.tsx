@@ -62,10 +62,10 @@ export default async function BookingFailedPage({
             No charges have been made to your card. You can try booking again or
             contact us at{" "}
             <a
-              href="mailto:info@pondirio.com"
+              href="mailto:pondiriocottages@gmail.com"
               className="text-amber-700 underline hover:text-amber-600"
             >
-              info@pondirio.com
+              pondiriocottages@gmail.com
             </a>{" "}
             for assistance.
           </p>
