@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyFacCallback } from "@/lib/payments";
 
-const SITE_URL = "https://pon-di-rio.vercel.app";
+const SITE_URL = "https://www.pondiriorivercottagesja.com";
 
 /** Redirect the browser after payment callback. */
 function redirect(url: string) {

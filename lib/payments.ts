@@ -121,7 +121,7 @@ export async function initiatePayment(
       CountryCode: currencyCode,
     },
     ExtendedData: {
-      MerchantResponseUrl: "https://pon-di-rio.vercel.app/api/payments/callback",
+      MerchantResponseUrl: "https://www.pondiriorivercottagesja.com/api/payments/callback",
       HostedPage: {
         PageSet: fac.pageSet,
         PageName: fac.pageName,
