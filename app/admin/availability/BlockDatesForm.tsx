@@ -4,8 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { blockDates } from "@/app/actions/admin";
 
-export function BlockDatesForm({ villaId }: { villaId: string }) {
+type Villa = { id: string; name: string };
+
+export function BlockDatesForm({ villas }: { villas: Villa[] }) {
   const router = useRouter();
+  const [villaId, setVillaId] = useState(villas[0]?.id || "");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [loading, setLoading] = useState(false);
@@ -14,6 +17,11 @@ export function BlockDatesForm({ villaId }: { villaId: string }) {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+
+    if (!villaId) {
+      setError("Please select a villa");
+      return;
+    }
 
     if (!startDate || !endDate) {
       setError("Both dates are required");
@@ -40,6 +48,20 @@ export function BlockDatesForm({ villaId }: { villaId: string }) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-wrap items-end gap-4">
+      <div>
+        <label className="mb-1 block text-sm text-gray-600">Villa</label>
+        <select
+          value={villaId}
+          onChange={(e) => setVillaId(e.target.value)}
+          className="h-10 rounded-md border border-gray-300 px-3 text-sm"
+        >
+          {villas.map((v) => (
+            <option key={v.id} value={v.id}>
+              {v.name}
+            </option>
+          ))}
+        </select>
+      </div>
       <div>
         <label className="mb-1 block text-sm text-gray-600">Start Date</label>
         <input

@@ -1,11 +1,10 @@
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-import { getAvailabilityBlocks } from "@/app/actions/admin";
+import { getVillas } from "@/app/actions/admin";
+import { prisma } from "@/lib/prisma";
 import { BlockDatesForm } from "./BlockDatesForm";
 import { RemoveBlockButton } from "./RemoveBlockButton";
-
-const VILLA_ID = "cmn854tso0000ck3p78a7zy4x";
 
 function formatDate(date: Date) {
   return new Date(date).toLocaleDateString("en-US", {
@@ -16,7 +15,16 @@ function formatDate(date: Date) {
 }
 
 export default async function AvailabilityPage() {
-  const blocks = await getAvailabilityBlocks(VILLA_ID);
+  const villas = await getVillas();
+
+  // Fetch blocks for all villas
+  const blocks = await prisma.availabilityBlock.findMany({
+    orderBy: { startDate: "asc" },
+    include: {
+      booking: { select: { id: true, guestName: true } },
+      villa: { select: { id: true, name: true } },
+    },
+  });
 
   return (
     <div>
@@ -24,7 +32,7 @@ export default async function AvailabilityPage() {
 
       <div className="mb-8 rounded-lg border bg-white p-6">
         <h2 className="mb-4 text-lg font-medium text-gray-900">Block Dates</h2>
-        <BlockDatesForm villaId={VILLA_ID} />
+        <BlockDatesForm villas={villas} />
       </div>
 
       {blocks.length === 0 ? (
@@ -34,6 +42,7 @@ export default async function AvailabilityPage() {
           <table className="w-full text-left text-sm">
             <thead className="border-b bg-gray-50 text-xs uppercase text-gray-500">
               <tr>
+                <th className="px-4 py-3">Villa</th>
                 <th className="px-4 py-3">Start</th>
                 <th className="px-4 py-3">End</th>
                 <th className="px-4 py-3">Reason</th>
@@ -45,6 +54,7 @@ export default async function AvailabilityPage() {
             <tbody className="divide-y">
               {blocks.map((block) => (
                 <tr key={block.id} className="hover:bg-gray-50">
+                  <td className="px-4 py-3 text-gray-700">{block.villa.name}</td>
                   <td className="px-4 py-3 text-gray-700">{formatDate(block.startDate)}</td>
                   <td className="px-4 py-3 text-gray-700">{formatDate(block.endDate)}</td>
                   <td className="px-4 py-3">
@@ -53,7 +63,7 @@ export default async function AvailabilityPage() {
                     </span>
                   </td>
                   <td className="px-4 py-3 text-gray-700">{block.source}</td>
-                  <td className="px-4 py-3 text-gray-500 text-xs">
+                  <td className="px-4 py-3 text-xs text-gray-500">
                     {block.booking ? block.booking.guestName : "--"}
                   </td>
                   <td className="px-4 py-3">

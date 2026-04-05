@@ -65,6 +65,7 @@ export async function blockDates(
     },
   });
   revalidatePath("/admin/availability");
+  revalidatePath("/admin/bookings");
   revalidatePath("/booking");
   return block;
 }
@@ -87,6 +88,7 @@ export async function unblockDates(blockId: string) {
     where: { id: blockId },
   });
   revalidatePath("/admin/availability");
+  revalidatePath("/admin/bookings");
   revalidatePath("/booking");
   return deleted;
 }
@@ -98,6 +100,16 @@ export async function getAvailabilityBlocks(villaId: string) {
     include: {
       booking: { select: { id: true, guestName: true } },
     },
+  });
+}
+
+// ─── Villas ──────────────────────────────────────────────
+
+export async function getVillas() {
+  return prisma.villa.findMany({
+    where: { isActive: true },
+    select: { id: true, name: true, slug: true },
+    orderBy: { name: "asc" },
   });
 }
 
