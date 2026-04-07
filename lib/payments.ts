@@ -103,9 +103,13 @@ export async function initiatePayment(
   const firstName = nameParts[0] || "";
   const lastName = nameParts.slice(1).join(" ") || firstName;
 
+  const totalAmount = process.env.PAYMENT_TEST_AMOUNT === "1"
+    ? 1.0
+    : parseFloat(booking.totalAmount.toString());
+
   const payload = {
     TransactionIdentifier: transactionId,
-    TotalAmount: parseFloat(booking.totalAmount.toString()),
+    TotalAmount: totalAmount,
     CurrencyCode: currencyCode,
     ThreeDSecure: true,
     OrderIdentifier: booking.id,
