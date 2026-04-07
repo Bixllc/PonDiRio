@@ -85,6 +85,23 @@ export async function blockDates(
     throw new Error("Start date must be before end date");
   }
 
+  // Prevent blocking dates that overlap with a confirmed booking
+  const conflicting = await prisma.booking.findFirst({
+    where: {
+      villaId,
+      status: "CONFIRMED",
+      checkIn: { lt: endDate },
+      checkOut: { gt: startDate },
+    },
+    select: { guestName: true, checkIn: true, checkOut: true },
+  });
+
+  if (conflicting) {
+    throw new Error(
+      `Cannot block dates — overlaps with confirmed booking for ${conflicting.guestName} (${conflicting.checkIn.toISOString().split("T")[0]} to ${conflicting.checkOut.toISOString().split("T")[0]})`,
+    );
+  }
+
   const block = await prisma.availabilityBlock.create({
     data: {
       villaId,

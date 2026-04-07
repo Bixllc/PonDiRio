@@ -4,20 +4,11 @@ export const revalidate = 0;
 import { getVillas } from "@/app/actions/admin";
 import { prisma } from "@/lib/prisma";
 import { BlockDatesForm } from "./BlockDatesForm";
-import { RemoveBlockButton } from "./RemoveBlockButton";
-
-function formatDate(date: Date) {
-  return new Date(date).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-}
+import { AvailabilityBlocksTable } from "./AvailabilityPageClient";
 
 export default async function AvailabilityPage() {
   const villas = await getVillas();
 
-  // Fetch blocks for all villas
   const blocks = await prisma.availabilityBlock.findMany({
     orderBy: { startDate: "asc" },
     include: {
@@ -25,6 +16,17 @@ export default async function AvailabilityPage() {
       villa: { select: { id: true, name: true } },
     },
   });
+
+  const serializedBlocks = blocks.map((b) => ({
+    id: b.id,
+    villaId: b.villaId,
+    villaName: b.villa.name,
+    startDate: b.startDate.toISOString().split("T")[0],
+    endDate: b.endDate.toISOString().split("T")[0],
+    reason: b.reason,
+    source: b.source,
+    guestName: b.booking?.guestName || null,
+  }));
 
   return (
     <div>
@@ -35,48 +37,7 @@ export default async function AvailabilityPage() {
         <BlockDatesForm villas={villas} />
       </div>
 
-      {blocks.length === 0 ? (
-        <p className="text-gray-500">No date blocks.</p>
-      ) : (
-        <div className="overflow-x-auto rounded-lg border bg-white">
-          <table className="w-full text-left text-sm">
-            <thead className="border-b bg-gray-50 text-xs uppercase text-gray-500">
-              <tr>
-                <th className="px-4 py-3">Villa</th>
-                <th className="px-4 py-3">Start</th>
-                <th className="px-4 py-3">End</th>
-                <th className="px-4 py-3">Reason</th>
-                <th className="px-4 py-3">Source</th>
-                <th className="px-4 py-3">Linked Booking</th>
-                <th className="px-4 py-3">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y">
-              {blocks.map((block) => (
-                <tr key={block.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-3 text-gray-700">{block.villa.name}</td>
-                  <td className="px-4 py-3 text-gray-700">{formatDate(block.startDate)}</td>
-                  <td className="px-4 py-3 text-gray-700">{formatDate(block.endDate)}</td>
-                  <td className="px-4 py-3">
-                    <span className="inline-block rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-800">
-                      {block.reason}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-gray-700">{block.source}</td>
-                  <td className="px-4 py-3 text-xs text-gray-500">
-                    {block.booking ? block.booking.guestName : "--"}
-                  </td>
-                  <td className="px-4 py-3">
-                    {block.reason !== "BOOKING" && (
-                      <RemoveBlockButton blockId={block.id} />
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+      <AvailabilityBlocksTable blocks={serializedBlocks} villas={villas} />
     </div>
   );
 }
