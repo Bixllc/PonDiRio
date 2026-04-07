@@ -44,6 +44,36 @@ export async function getBooking(bookingId: string) {
   });
 }
 
+export async function cancelBooking(bookingId: string) {
+  const booking = await prisma.booking.findUnique({
+    where: { id: bookingId },
+    select: { id: true, status: true },
+  });
+
+  if (!booking) {
+    throw new Error("Booking not found");
+  }
+
+  if (booking.status !== "CONFIRMED" && booking.status !== "PENDING_PAYMENT") {
+    throw new Error(`Cannot cancel a booking with status ${booking.status}`);
+  }
+
+  // Cancel booking and delete linked availability block in one transaction
+  await prisma.$transaction([
+    prisma.booking.update({
+      where: { id: bookingId },
+      data: { status: "CANCELLED" },
+    }),
+    prisma.availabilityBlock.deleteMany({
+      where: { bookingId },
+    }),
+  ]);
+
+  revalidatePath("/admin/bookings");
+  revalidatePath("/admin/availability");
+  revalidatePath("/booking");
+}
+
 // ─── Date Blocking ────────────────────────────────────────
 
 export async function blockDates(

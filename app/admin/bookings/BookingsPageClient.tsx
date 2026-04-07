@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { BookingsCalendar } from "./BookingsCalendar";
+import { CancelBookingButton } from "./CancelBookingButton";
 
 type Villa = { id: string; name: string; slug: string };
 
@@ -110,6 +111,7 @@ export function BookingsPageClient({
                     <th className="px-4 py-3">Total</th>
                     <th className="px-4 py-3">Status</th>
                     <th className="px-4 py-3">Payment</th>
+                    <th className="px-4 py-3">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y">
@@ -156,6 +158,11 @@ export function BookingsPageClient({
                             </span>
                           ) : (
                             <span className="text-xs text-gray-400">--</span>
+                          )}
+                        </td>
+                        <td className="px-4 py-3">
+                          {(booking.status === "CONFIRMED" || booking.status === "PENDING_PAYMENT") && (
+                            <CancelBookingButton bookingId={booking.id} guestName={booking.guestName} />
                           )}
                         </td>
                       </tr>
