@@ -40,11 +40,11 @@ export async function checkAvailability(
   // Run all three checks in parallel
   const [conflictingBooking, conflictingBlock, conflictingEvent] =
     await Promise.all([
-      // 1. Overlapping bookings that are active (confirmed or pending payment)
+      // 1. Overlapping bookings that are confirmed
       prisma.booking.findFirst({
         where: {
           villaId,
-          status: { in: [BookingStatus.CONFIRMED, BookingStatus.PENDING_PAYMENT] },
+          status: BookingStatus.CONFIRMED,
           checkIn: { lt: checkOut },
           checkOut: { gt: checkIn },
         },
@@ -100,7 +100,7 @@ export async function getBlockedRanges(
     prisma.booking.findMany({
       where: {
         villaId,
-        status: { in: [BookingStatus.CONFIRMED, BookingStatus.PENDING_PAYMENT] },
+        status: BookingStatus.CONFIRMED,
         checkIn: { lt: to },
         checkOut: { gt: from },
       },
