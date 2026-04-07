@@ -121,7 +121,7 @@ export async function initiatePayment(
       CountryCode: currencyCode,
     },
     ExtendedData: {
-      MerchantResponseUrl: "https://www.pondiriorivercottagesja.com/api/payments/callback",
+      MerchantResponseUrl: `${process.env.SITE_URL || "https://www.pondiriorivercottagesja.com"}/api/payments/callback`,
       HostedPage: {
         PageSet: fac.pageSet,
         PageName: fac.pageName,
