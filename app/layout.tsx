@@ -17,6 +17,10 @@ const cinzel = Cinzel({
 export const metadata = {
   title: "Pon Di Rio",
   description: "Luxury airbnb homes in Jamaica",
+  icons: {
+    icon: "/logotransparent.png",
+    apple: "/logotransparent.png",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
