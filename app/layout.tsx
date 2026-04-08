@@ -15,8 +15,11 @@ const cinzel = Cinzel({
 });
 
 export const metadata = {
+  metadataBase: new URL(
+    process.env.SITE_URL || "https://www.pondiriorivercottagesja.com",
+  ),
   title: "Pon Di Rio",
-  description: "Luxury airbnb homes in Jamaica",
+  description: "Luxury River Cottages in Jamaica",
   icons: {
     icon: "/logotransparent.png",
     apple: "/logotransparent.png",
