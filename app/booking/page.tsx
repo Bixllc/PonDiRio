@@ -9,8 +9,6 @@ import { DayPicker, DateRange } from "react-day-picker";
 import { format, addMonths, eachDayOfInterval, startOfDay, differenceInCalendarDays, parseISO } from "date-fns";
 import "react-day-picker/style.css";
 
-const CLEANING_FEE = 75;
-const SERVICE_FEE = 50;
 const MINIMUM_NIGHTS = 2;
 
 type Villa = {
@@ -188,7 +186,7 @@ function BookingPageContent() {
       : 0;
 
   const stayTotal = pricePerNight && nights > 0 ? pricePerNight * nights : null;
-  const grandTotal = stayTotal !== null ? stayTotal + CLEANING_FEE + SERVICE_FEE : null;
+  const grandTotal = stayTotal;
 
   // Check availability when dates or villa change
   useEffect(() => {
@@ -707,14 +705,6 @@ function BookingPageContent() {
                 <span className="font-medium text-[#1a1a2e]">
                   {stayTotal !== null ? `$${stayTotal}` : "--"}
                 </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Cleaning fee</span>
-                <span className="font-medium text-[#1a1a2e]">${CLEANING_FEE}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Service fee</span>
-                <span className="font-medium text-[#1a1a2e]">${SERVICE_FEE}</span>
               </div>
             </div>
 
