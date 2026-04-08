@@ -562,7 +562,7 @@ function BookingPageContent() {
                   {...register("guests", { required: "Please select guests" })}
                   className={`${inputCls} appearance-none`}
                 >
-                  {[1, 2, 3, 4, 5, 6].map((n) => (
+                  {[1, 2, 3, 4].map((n) => (
                     <option key={n} value={n}>
                       {n} {n === 1 ? "Guest" : "Guests"}
                     </option>
