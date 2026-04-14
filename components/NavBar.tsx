@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { ChevronDown, Menu, X } from "lucide-react";
@@ -36,7 +37,7 @@ export default function Navbar() {
       {/* Logo */}
       <div className="text-2xl tracking-wide">
         <a href="/">
-          <img src="/logotransparent.png" alt="Pon Di Rio" className="h-16 w-auto" />
+          <Image src="/logotransparent.png" alt="Pon Di Rio" width={64} height={64} className="h-16 w-auto" />
         </a>
       </div>
 

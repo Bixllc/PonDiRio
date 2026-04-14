@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Calendar, Users } from "lucide-react";
 import { DayPicker } from "react-day-picker";
@@ -158,10 +159,13 @@ export default function HeroSection() {
     <div className="relative min-h-screen w-full overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
-        <img
+        <Image
           src="/hero-bg.jpg"
           alt="Jamaican riverside"
-          className="h-full w-full object-cover"
+          fill
+          priority
+          className="object-cover"
+          sizes="100vw"
         />
         {/* Dark gradient overlays for text readability */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/80" />
@@ -391,12 +395,13 @@ function WaveCarousel({ images }: { images: string[] }) {
             className="relative flex-shrink-0 w-[280px] h-[360px] bg-white p-1 rounded-lg transition-transform duration-100 ease-out"
             style={{ willChange: "transform" }}
           >
-            <div className="w-full h-full rounded overflow-hidden">
-              <img
+            <div className="relative w-full h-full rounded overflow-hidden">
+              <Image
                 src={src}
                 alt={`Villa view ${(index % carouselImages.length) + 1}`}
-                className="w-full h-full object-cover"
-                loading="lazy"
+                fill
+                className="object-cover"
+                sizes="280px"
               />
             </div>
           </div>

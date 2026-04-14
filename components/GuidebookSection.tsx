@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { MapPin, Clock, Star, Camera, Utensils, Compass } from "lucide-react";
 
 export default function GuidebookSection() {
@@ -130,12 +131,13 @@ export default function GuidebookSection() {
             </div>
 
             <div className="overflow-hidden rounded-2xl shadow-md ring-1 ring-black/5">
-              <div className="aspect-[4/3]">
-                <img
+              <div className="relative aspect-[4/3]">
+                <Image
                   src="/img3.png"
                   alt="Mountain range above a sea of clouds at sunrise"
-                  className="w-full h-full object-cover transition-transform duration-700 hover:scale-[1.035]"
-                  loading="lazy"
+                  fill
+                  className="object-cover transition-transform duration-700 hover:scale-[1.035]"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                 />
               </div>
             </div>
@@ -152,12 +154,13 @@ export default function GuidebookSection() {
               {attractions.map((a) => (
                 <article key={a.id} className="group">
                   <div className="overflow-hidden rounded-2xl shadow-sm ring-1 ring-black/5 mb-6">
-                    <div className="aspect-[4/3]">
-                      <img
+                    <div className="relative aspect-[4/3]">
+                      <Image
                         src={a.image}
                         alt={a.name}
-                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.035]"
-                        loading="lazy"
+                        fill
+                        className="object-cover transition-transform duration-700 group-hover:scale-[1.035]"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       />
                     </div>
                   </div>
@@ -219,12 +222,13 @@ export default function GuidebookSection() {
             </div>
 
             <div className="overflow-hidden rounded-2xl shadow-md ring-1 ring-black/5">
-              <div className="aspect-[4/5]">
-                <img
+              <div className="relative aspect-[4/5]">
+                <Image
                   src="/missts.jpg"
                   alt="Plated fine dining dish in a candlelit restaurant"
-                  className="w-full h-full object-cover transition-transform duration-700 hover:scale-[1.035]"
-                  loading="lazy"
+                  fill
+                  className="object-cover transition-transform duration-700 hover:scale-[1.035]"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                 />
               </div>
             </div>

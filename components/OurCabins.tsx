@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
+import Image from "next/image";
 
 function VillaImageSlider({
   images,
@@ -36,11 +37,12 @@ function VillaImageSlider({
 
   return (
     <div className="relative h-full w-full">
-      <img
+      <Image
         src={safeImages[index]}
         alt={alt}
-        loading="lazy"
-        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+        fill
+        className="object-cover transition-transform duration-700 group-hover:scale-105"
+        sizes="(max-width: 768px) 100vw, 50vw"
       />
 
       {safeImages.length > 1 && (

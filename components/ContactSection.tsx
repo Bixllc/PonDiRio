@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { Mail, Phone, MapPin, Clock, Send } from "lucide-react";
 import { Card } from "./ui/card";
@@ -269,12 +270,13 @@ export default function ContactSection() {
             </Card>
 
             <div className="overflow-hidden rounded-2xl shadow-lg">
-              <div className="aspect-[4/5]">
-                <img
+              <div className="relative aspect-[4/5]">
+                <Image
                   src="/river1.jpg"
                   alt="Luxury resort at dusk by the pool"
-                  className="h-full w-full object-cover transition-transform duration-700 hover:scale-[1.035]"
-                  loading="lazy"
+                  fill
+                  className="object-cover transition-transform duration-700 hover:scale-[1.035]"
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
             </div>

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Wifi, Car, Kayak, BrushCleaning, ChefHat } from "lucide-react";
 
 export default function AmenitiesSection() {
@@ -50,11 +51,13 @@ export default function AmenitiesSection() {
         {/* Split Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center">
           {/* Left image */}
-          <div className="aspect-[4/5] overflow-hidden rounded-2xl shadow-md order-2 lg:order-1">
-            <img
+          <div className="relative aspect-[4/5] overflow-hidden rounded-2xl shadow-md order-2 lg:order-1">
+            <Image
               src="/img13.JPG"
               alt="Modern luxury property interior"
-              className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+              fill
+              className="object-cover transition-transform duration-700 hover:scale-105"
+              sizes="(max-width: 1024px) 100vw, 50vw"
             />
           </div>
 

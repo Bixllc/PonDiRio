@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const rows = [
@@ -71,12 +72,13 @@ export default function AboutSection() {
                 <span className="text-sm text-gray-400 pt-2">{row.num}.</span>
 
                 {/* Image — square */}
-                <div className="w-full h-[220px] md:h-[240px] overflow-hidden rounded-sm">
-                  <img
+                <div className="relative w-full h-[220px] md:h-[240px] overflow-hidden rounded-sm">
+                  <Image
                     src={row.img}
                     alt={row.alt}
-                    className="h-full w-full object-cover"
-                    loading="lazy"
+                    fill
+                    className="object-cover"
+                    sizes="280px"
                   />
                 </div>
 
@@ -105,12 +107,15 @@ export default function AboutSection() {
       <div className="absolute inset-x-0 top-0 h-[75%] bg-[#F5F1E8]" />
 
       <div className="relative mx-auto max-w-6xl px-6 lg:px-16 -mt-2">
-        <img
-          src="/img13.JPG"
-          alt="Outdoor deck and gazebo at Pon Di Rio"
-          className="w-full h-[50vh] md:h-[65vh] object-cover shadow-[0_20px_60px_rgba(0,0,0,0.08)]"
-          loading="lazy"
-        />
+        <div className="relative w-full h-[50vh] md:h-[65vh] shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
+          <Image
+            src="/img13.JPG"
+            alt="Outdoor deck and gazebo at Pon Di Rio"
+            fill
+            className="object-cover"
+            sizes="100vw"
+          />
+        </div>
       </div>
     </div>
     </>
