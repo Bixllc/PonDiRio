@@ -44,34 +44,39 @@ export async function getBooking(bookingId: string) {
   });
 }
 
-export async function cancelBooking(bookingId: string) {
+export async function cancelBooking(bookingId: string): Promise<{ success: boolean; error?: string }> {
   const booking = await prisma.booking.findUnique({
     where: { id: bookingId },
     select: { id: true, status: true },
   });
 
   if (!booking) {
-    throw new Error("Booking not found");
+    return { success: false, error: "Booking not found" };
   }
 
   if (booking.status !== "CONFIRMED" && booking.status !== "PENDING_PAYMENT") {
-    throw new Error(`Cannot cancel a booking with status ${booking.status}`);
+    return { success: false, error: `Cannot cancel a booking with status ${booking.status}` };
   }
 
-  // Cancel booking and delete linked availability block in one transaction
-  await prisma.$transaction([
-    prisma.booking.update({
-      where: { id: bookingId },
-      data: { status: "CANCELLED" },
-    }),
-    prisma.availabilityBlock.deleteMany({
-      where: { bookingId },
-    }),
-  ]);
+  try {
+    // Cancel booking and delete linked availability block in one transaction
+    await prisma.$transaction([
+      prisma.booking.update({
+        where: { id: bookingId },
+        data: { status: "CANCELLED" },
+      }),
+      prisma.availabilityBlock.deleteMany({
+        where: { bookingId },
+      }),
+    ]);
+  } catch (err) {
+    return { success: false, error: err instanceof Error ? err.message : "Failed to cancel booking" };
+  }
 
   revalidatePath("/admin/bookings");
   revalidatePath("/admin/availability");
   revalidatePath("/booking");
+  return { success: true };
 }
 
 // ─── Date Blocking ────────────────────────────────────────

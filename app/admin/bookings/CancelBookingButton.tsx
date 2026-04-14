@@ -22,10 +22,14 @@ export function CancelBookingButton({
 
     setLoading(true);
     try {
-      await cancelBooking(bookingId);
-      router.refresh();
-    } catch (err) {
-      alert(err instanceof Error ? err.message : "Failed to cancel booking");
+      const result = await cancelBooking(bookingId);
+      if (!result.success) {
+        alert(result.error || "Failed to cancel booking");
+      } else {
+        router.refresh();
+      }
+    } catch {
+      alert("Failed to cancel booking. Please try again.");
     } finally {
       setLoading(false);
     }
