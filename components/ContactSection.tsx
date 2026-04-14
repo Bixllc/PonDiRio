@@ -68,8 +68,8 @@ export default function ContactSection() {
     {
       icon: <Phone className="h-5 w-5" />,
       label: "Phone",
-      value: "+1 (876) 123-4567",
-      link: "tel:+18761234567",
+      value: "+1 (658) 213-5665",
+      link: "tel:+16582135665",
     },
     {
       icon: <MapPin className="h-5 w-5" />,

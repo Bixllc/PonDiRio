@@ -100,7 +100,7 @@ export default function ContactPage() {
                   >
                     Phone
                   </h3>
-                  <p className="text-gray-700 text-base">+1 (876) 555-0123</p>
+                  <p className="text-gray-700 text-base">+1 (658) 213-5665</p>
                 </div>
 
                 <div>
