@@ -43,9 +43,9 @@ export default function AboutSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-20 gap-y-8 mb-24">
           <div className="text-gray-600 text-base leading-relaxed space-y-6">
             <p>
-              Pon Di Rios River Villas offers a serene blend of luxury and
-              nature, with each villa featuring bright bedrooms with plush beds,
-              vaulted ceilings, and hardwood furnishings.
+              Pon Di Rio Villas offers a serene blend of luxury and nature.
+              Each villa features bright bathrooms with plush beds, vaulted
+              ceilings and hardwood finishes.
             </p>
             <p>
               Guests can enjoy private open-air rainfall showers with
