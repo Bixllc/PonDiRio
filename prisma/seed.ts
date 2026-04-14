@@ -14,7 +14,7 @@ async function main() {
       name: "Pon Di River",
       slug: "pon-di-river",
       description:
-        "A stunning riverside villa nestled in the lush hills of St. Mary, Jamaica. Private pool, chef services available, and direct river access.",
+        "A stunning riverside villa nestled in the lush hills of Retreat, St. Mary, Jamaica. Private pool, chef services available, and direct river access.",
       pricePerNight: 350,
       maxGuests: 6,
       isActive: true,

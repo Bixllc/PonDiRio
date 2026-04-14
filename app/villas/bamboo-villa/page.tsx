@@ -27,7 +27,7 @@ export default function BambooVillaPage() {
             Bamboo Villa
           </h1>
           <p className="mt-4 text-lg md:text-xl tracking-wide text-white/90">
-            Pon Di Rio, St. Mary, Jamaica
+            Pon Di Rio, Retreat, St. Mary, Jamaica
           </p>
         </div>
       </section>

@@ -111,7 +111,7 @@ export default function ContactPage() {
                     Location
                   </h3>
                   <p className="text-gray-700 text-base">
-                    St Mary, Jamaica
+                    Retreat, St. Mary, Jamaica
                   </p>
                 </div>
 

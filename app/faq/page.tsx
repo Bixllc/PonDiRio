@@ -35,7 +35,7 @@ const faqs = [
       },
       {
         q: "How do I get to Pon Di Rio?",
-        a: "Our villas are located in St. Mary, Jamaica. We will provide detailed directions and transfer recommendations in your pre-arrival email. Airport transfers from Norman Manley International Airport (Kingston) or Sangster International Airport (Montego Bay) can be arranged upon request.",
+        a: "Our villas are located in Retreat, St. Mary, Jamaica. We will provide detailed directions and transfer recommendations in your pre-arrival email. Airport transfers from Norman Manley International Airport (Kingston) or Sangster International Airport (Montego Bay) can be arranged upon request.",
       },
       {
         q: "Is there Wi-Fi available?",

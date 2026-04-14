@@ -105,7 +105,7 @@ export async function sendBookingConfirmation(
         <tr>
           <td style="background-color:#1a1a2e;padding:24px 40px;text-align:center;">
             <p style="margin:0;font-size:13px;color:#888;">
-              &copy; ${new Date().getFullYear()} Pon Di Rio &middot; St. Mary, Jamaica
+              &copy; ${new Date().getFullYear()} Pon Di Rio &middot; Retreat, St. Mary, Jamaica
             </p>
           </td>
         </tr>
@@ -207,7 +207,7 @@ export async function sendContactMessage(
         <tr>
           <td style="background-color:#1a1a2e;padding:24px 40px;text-align:center;">
             <p style="margin:0;font-size:13px;color:#888;">
-              &copy; ${new Date().getFullYear()} Pon Di Rio &middot; St. Mary, Jamaica
+              &copy; ${new Date().getFullYear()} Pon Di Rio &middot; Retreat, St. Mary, Jamaica
             </p>
           </td>
         </tr>

@@ -74,7 +74,7 @@ export default function ContactSection() {
     {
       icon: <MapPin className="h-5 w-5" />,
       label: "Location",
-      value: "St. Mary, Jamaica",
+      value: "Retreat, St. Mary, Jamaica",
     },
     {
       icon: <Clock className="h-5 w-5" />,
