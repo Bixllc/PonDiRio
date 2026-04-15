@@ -12,7 +12,6 @@ const carouselImages = [
   "/carousel-01.jpg",
   "/carousel-02.jpg",
   "/carousel-03.jpg",
-  "/carousel-04.jpg",
   "/carousel-05.jpg",
   "/carousel-06.jpg",
   "/carousel-07.jpg",
