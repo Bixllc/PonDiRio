@@ -157,7 +157,10 @@ export function BookingsCalendar({
   // Build calendar entries
   const entries: CalendarEntry[] = [];
 
+  const HIDDEN_STATUSES = new Set(["CANCELLED", "FAILED", "DRAFT"]);
+
   for (const b of bookings) {
+    if (HIDDEN_STATUSES.has(b.status)) continue;
     if (villaFilter !== "all" && b.villa.id !== villaFilter) continue;
     const vIdx = villaIndex.get(b.villa.id) ?? 0;
     const villaColor = VILLA_BAR_COLORS[vIdx % VILLA_BAR_COLORS.length];
