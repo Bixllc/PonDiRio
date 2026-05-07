@@ -83,7 +83,7 @@ export default function Footer() {
                 <Mail size={20} />
               </a>
               <a
-                href="tel:+1234567890"
+                href="tel:+16582135665"
                 className="w-11 h-11 rounded-full border-2 border-amber-500 bg-amber-500 flex items-center justify-center text-black hover:bg-amber-400 hover:border-amber-400 transition-colors"
               >
                 <Phone size={20} />
@@ -103,11 +103,6 @@ export default function Footer() {
               <li>
                 <a href="#villas" className="hover:text-white transition-colors">
                   Our Villas
-                </a>
-              </li>
-              <li>
-                <a href="#gallery" className="hover:text-white transition-colors">
-                  Gallery
                 </a>
               </li>
               <li>
