@@ -57,17 +57,21 @@ New `vercel.json` cron runs `POST /api/calendar/sync` at the top of every hour (
 - Method: `GET`
 - Query param: `villaId` (required)
 - No authentication — must be publicly accessible for Airbnb to fetch
+- Add `Cache-Control: public, max-age=3600` response header to limit DB load from repeated fetches
+- Returns `400` if `villaId` is missing or no villa is found with that ID
+- Returns `500` on DB failure
 - Reads from DB:
   - `Booking` where `status = CONFIRMED` and `villaId` matches
-  - `AvailabilityBlock` where `villaId` matches
+  - `AvailabilityBlock` where `villaId` matches AND `bookingId IS NULL` (manual/maintenance blocks only — excludes booking-linked blocks to avoid duplicate events)
 - Returns:
   - `Content-Type: text/calendar; charset=utf-8`
   - `Content-Disposition: inline; filename="calendar.ics"`
+  - `Cache-Control: public, max-age=3600`
   - Valid iCal body (VCALENDAR wrapping VEVENT entries)
 - Event format per entry:
   - `UID`: `{id}@pondiriorivercottagesja.com`
-  - `DTSTART`: check-in / startDate (DATE format, no time)
-  - `DTEND`: check-out / endDate (DATE format, no time)
+  - `DTSTART`: check-in / startDate (DATE format `YYYYMMDD`, no time component)
+  - `DTEND`: check-out / endDate (DATE format `YYYYMMDD`, exclusive per RFC 5545 — departure day is not occupied, so `checkOut` is used directly as `DTEND`)
   - `SUMMARY`: `Reserved` (no guest details exposed)
   - `DTSTAMP`: current timestamp
 
@@ -76,10 +80,12 @@ New `vercel.json` cron runs `POST /api/calendar/sync` at the top of every hour (
 Current auth: checks `x-sync-secret` header against `SYNC_SECRET` env var.
 
 Updated auth: accept the request if **either**:
-- `x-sync-secret` matches `SYNC_SECRET`, OR
-- `x-vercel-cron` header equals `"1"` (Vercel injects this on cron-triggered calls)
+- `x-sync-secret` matches `SYNC_SECRET` (manual admin triggers), OR
+- `Authorization` header equals `Bearer {CRON_SECRET}` where `CRON_SECRET` is a new env var
 
-This keeps manual admin triggers working while enabling the automated cron.
+Vercel automatically injects `Authorization: Bearer {CRON_SECRET}` on cron-triggered requests when `CRON_SECRET` is set in the Vercel environment. This is the secure approach — `x-vercel-cron: 1` is a plain HTTP header that any caller can spoof, so it must not be used alone as auth.
+
+**Required env var:** `CRON_SECRET` — set in Vercel project settings. Can be any random secret string.
 
 ### 3. `vercel.json` (new file)
 
@@ -126,7 +132,11 @@ Triggers hourly sync of all active calendar feeds. Vercel sends a `POST` request
 
 ### Adding Site → Airbnb feed
 1. Copy the export URL: `https://www.pondiriorivercottagesja.com/api/calendar/export.ics?villaId=cmn854tso0000ck3p78a7zy4x`
+   - Note: `villaId` is the database ID of the villa. If the DB is ever re-seeded, this ID will change and the Airbnb subscription must be updated.
 2. In Airbnb host dashboard: Calendar → Availability settings → Import calendar → paste URL
+
+### Required environment variables (add to Vercel project settings)
+- `CRON_SECRET` — a random secret string, used by Vercel to authenticate cron-triggered sync requests
 
 ---
 
