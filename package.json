@@ -16,6 +16,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.23.22",
+    "ical-generator": "^10.2.0",
     "lucide-react": "^0.544.0",
     "next": "^14.2.32",
     "node-ical": "^0.25.6",
