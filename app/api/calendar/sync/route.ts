@@ -5,14 +5,15 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {
-  const secret = process.env.SYNC_SECRET;
-  if (!secret) {
-    console.error("SYNC_SECRET environment variable is not set");
-    return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
-  }
+  const syncSecret = process.env.SYNC_SECRET;
+  const cronSecret = process.env.CRON_SECRET;
 
-  const provided = request.headers.get("x-sync-secret");
-  if (provided !== secret) {
+  const providedSyncSecret = request.headers.get("x-sync-secret");
+  const providedAuth = request.headers.get("authorization");
+  const isVercelCron = providedAuth === `Bearer ${cronSecret}` && !!cronSecret;
+  const isManualTrigger = !!syncSecret && providedSyncSecret === syncSecret;
+
+  if (!isVercelCron && !isManualTrigger) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
