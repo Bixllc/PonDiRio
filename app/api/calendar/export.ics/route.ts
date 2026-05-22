@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
 
     for (const booking of bookings) {
       calendar.createEvent({
-        uid: `booking-${booking.id}@pondiriorivercottagesja.com`,
+        id: `booking-${booking.id}@pondiriorivercottagesja.com`,
         start: booking.checkIn,
         end: booking.checkOut,
         summary: "Reserved",
@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
 
     for (const block of blocks) {
       calendar.createEvent({
-        uid: `block-${block.id}@pondiriorivercottagesja.com`,
+        id: `block-${block.id}@pondiriorivercottagesja.com`,
         start: block.startDate,
         end: block.endDate,
         summary: "Reserved",
