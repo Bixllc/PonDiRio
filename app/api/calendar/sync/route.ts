@@ -8,9 +8,13 @@ export async function POST(request: NextRequest) {
   const syncSecret = process.env.SYNC_SECRET;
   const cronSecret = process.env.CRON_SECRET;
 
+  if (!syncSecret && !cronSecret) {
+    console.error("Neither SYNC_SECRET nor CRON_SECRET is set — sync route will reject all requests");
+  }
+
   const providedSyncSecret = request.headers.get("x-sync-secret");
   const providedAuth = request.headers.get("authorization");
-  const isVercelCron = providedAuth === `Bearer ${cronSecret}` && !!cronSecret;
+  const isVercelCron = !!cronSecret && providedAuth === `Bearer ${cronSecret}`;
   const isManualTrigger = !!syncSecret && providedSyncSecret === syncSecret;
 
   if (!isVercelCron && !isManualTrigger) {
