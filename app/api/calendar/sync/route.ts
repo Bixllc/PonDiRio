@@ -4,7 +4,7 @@ import { syncAllFeeds } from "@/lib/calendar";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export async function POST(request: NextRequest) {
+async function handleSync(request: NextRequest) {
   const syncSecret = process.env.SYNC_SECRET;
   const cronSecret = process.env.CRON_SECRET;
 
@@ -32,4 +32,12 @@ export async function POST(request: NextRequest) {
     console.error("Calendar sync error:", error);
     return NextResponse.json({ error: "Calendar sync failed" }, { status: 500 });
   }
+}
+
+export async function GET(request: NextRequest) {
+  return handleSync(request);
+}
+
+export async function POST(request: NextRequest) {
+  return handleSync(request);
 }
