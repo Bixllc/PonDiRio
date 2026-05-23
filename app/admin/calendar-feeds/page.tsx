@@ -6,7 +6,7 @@ import { AddFeedForm } from "./AddFeedForm";
 import { RemoveFeedButton } from "./RemoveFeedButton";
 import { SyncButton } from "./SyncButton";
 
-const VILLA_ID = "cmn854tso0000ck3p78a7zy4x";
+const VILLA_ID = "cmnb7u6ko0000z73pgrit9bh8"; // Palm Villa
 
 function formatDate(date: Date | null) {
   if (!date) return "Never";
