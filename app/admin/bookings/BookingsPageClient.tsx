@@ -30,6 +30,15 @@ type Block = {
   booking: { id: string; guestName: string } | null;
 };
 
+type ExternalEvent = {
+  id: string;
+  villaId: string;
+  startDate: string;
+  endDate: string;
+  summary: string;
+  sourceName: string;
+};
+
 const STATUS_COLORS: Record<string, string> = {
   CONFIRMED: "bg-green-100 text-green-800",
   PENDING_PAYMENT: "bg-yellow-100 text-yellow-800",
@@ -56,10 +65,12 @@ function formatDate(date: string) {
 export function BookingsPageClient({
   bookings,
   blocks,
+  externalEvents,
   villas,
 }: {
   bookings: Booking[];
   blocks: Block[];
+  externalEvents: ExternalEvent[];
   villas: Villa[];
 }) {
   const [view, setView] = useState<"calendar" | "table">("calendar");
@@ -93,7 +104,7 @@ export function BookingsPageClient({
       </div>
 
       {view === "calendar" ? (
-        <BookingsCalendar bookings={bookings} blocks={blocks} villas={villas} />
+        <BookingsCalendar bookings={bookings} blocks={blocks} externalEvents={externalEvents} villas={villas} />
       ) : (
         <>
           {bookings.length === 0 ? (

@@ -9,13 +9,21 @@ export default async function BookingsPage() {
   const [bookings, villas] = await Promise.all([getBookings(), getVillas()]);
 
   // Fetch all non-BOOKING availability blocks (manual/maintenance) across all villas
-  const blocks = await prisma.availabilityBlock.findMany({
-    where: { reason: { not: "BOOKING" } },
-    orderBy: { startDate: "asc" },
-    include: {
-      booking: { select: { id: true, guestName: true } },
-    },
-  });
+  const [blocks, externalEvents] = await Promise.all([
+    prisma.availabilityBlock.findMany({
+      where: { reason: { not: "BOOKING" } },
+      orderBy: { startDate: "asc" },
+      include: {
+        booking: { select: { id: true, guestName: true } },
+      },
+    }),
+    prisma.externalCalendarEvent.findMany({
+      orderBy: { startDate: "asc" },
+      include: {
+        feed: { select: { sourceName: true } },
+      },
+    }),
+  ]);
 
   // Serialize dates and Decimals for client component
   const serializedBookings = bookings.map((b) => ({
@@ -42,10 +50,20 @@ export default async function BookingsPage() {
     booking: bl.booking,
   }));
 
+  const serializedExternalEvents = externalEvents.map((ev) => ({
+    id: ev.id,
+    villaId: ev.villaId,
+    startDate: ev.startDate.toISOString().split("T")[0],
+    endDate: ev.endDate.toISOString().split("T")[0],
+    summary: ev.summary ?? "",
+    sourceName: ev.feed.sourceName,
+  }));
+
   return (
     <BookingsPageClient
       bookings={serializedBookings}
       blocks={serializedBlocks}
+      externalEvents={serializedExternalEvents}
       villas={villas}
     />
   );

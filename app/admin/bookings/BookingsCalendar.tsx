@@ -29,9 +29,18 @@ type Block = {
   booking: { id: string; guestName: string } | null;
 };
 
+type ExternalEvent = {
+  id: string;
+  villaId: string;
+  startDate: string;
+  endDate: string;
+  summary: string;
+  sourceName: string;
+};
+
 type CalendarEntry = {
   id: string;
-  type: "booking" | "block";
+  type: "booking" | "block" | "external";
   label: string;
   startDate: Date;
   endDate: Date;
@@ -40,6 +49,7 @@ type CalendarEntry = {
   color: string;
   booking?: Booking;
   block?: Block;
+  externalEvent?: ExternalEvent;
 };
 
 // ── Helpers ──────────────────────────────────────────────
@@ -126,10 +136,12 @@ const VILLA_BAR_COLORS = [
 export function BookingsCalendar({
   bookings,
   blocks,
+  externalEvents,
   villas,
 }: {
   bookings: Booking[];
   blocks: Block[];
+  externalEvents: ExternalEvent[];
   villas: Villa[];
 }) {
   const today = new Date();
@@ -193,6 +205,22 @@ export function BookingsCalendar({
       villaName: villa?.name || "Unknown",
       color: STATUS_BAR_COLOR.MANUAL_BLOCK,
       block: bl,
+    });
+  }
+
+  for (const ev of externalEvents) {
+    if (villaFilter !== "all" && ev.villaId !== villaFilter) continue;
+    const villa = villas.find((v) => v.id === ev.villaId);
+    entries.push({
+      id: ev.id,
+      type: "external",
+      label: ev.sourceName,
+      startDate: toDate(ev.startDate),
+      endDate: toDate(ev.endDate),
+      villaId: ev.villaId,
+      villaName: villa?.name || "Unknown",
+      color: "bg-slate-400",
+      externalEvent: ev,
     });
   }
 
@@ -364,6 +392,9 @@ export function BookingsCalendar({
         <span className="flex items-center gap-1.5">
           <span className="inline-block h-2.5 w-6 rounded-sm bg-red-400" /> Manual Block
         </span>
+        <span className="flex items-center gap-1.5">
+          <span className="inline-block h-2.5 w-6 rounded-sm bg-slate-400" /> Airbnb
+        </span>
         {villas.length > 1 && villaFilter === "all" &&
           villas.map((v, i) => (
             <span key={v.id} className="flex items-center gap-1.5">
@@ -438,8 +469,8 @@ export function BookingsCalendar({
                   const { entry, startCol, span, row, isStart, isEnd } = bar;
                   const leftPct = (startCol / 7) * 100;
                   const widthPct = (span / 7) * 100;
-                  const textColor = entry.type === "block"
-                    ? STATUS_BAR_TEXT.MANUAL_BLOCK
+                  const textColor = entry.type === "block" || entry.type === "external"
+                    ? "text-white"
                     : villaFilter === "all" && villas.length > 1
                       ? "text-white"
                       : STATUS_BAR_TEXT[entry.booking?.status || ""] || "text-white";
