@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Calendar, Users } from "lucide-react";
 import { DayPicker } from "react-day-picker";
-import { format, eachDayOfInterval, parseISO, startOfDay, addMonths } from "date-fns";
+import { format, eachDayOfInterval, parseISO, startOfDay } from "date-fns";
 import "react-day-picker/style.css";
 
 const carouselImages = [
@@ -147,7 +147,6 @@ export default function HeroSection() {
 
   const disabledDays = [
     { before: startOfDay(new Date()) },
-    { after: addMonths(new Date(), 6) },
     ...blockedDays,
   ];
 

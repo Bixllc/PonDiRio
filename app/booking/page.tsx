@@ -6,7 +6,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { User, Mail, Phone, Users, Home } from "lucide-react";
 import { initiateBookingPayment } from "@/app/actions/booking";
 import { DayPicker, DateRange } from "react-day-picker";
-import { format, addMonths, eachDayOfInterval, startOfDay, differenceInCalendarDays, parseISO } from "date-fns";
+import { format, eachDayOfInterval, startOfDay, differenceInCalendarDays, parseISO } from "date-fns";
 import "react-day-picker/style.css";
 
 const MINIMUM_NIGHTS = 2;
@@ -584,7 +584,7 @@ function BookingPageContent() {
                 min={MINIMUM_NIGHTS}
                 disabled={[
                   { before: startOfDay(new Date()) },
-                  { after: addMonths(new Date(), 6) },
+
                   ...blockedDays,
                 ]}
                 excludeDisabled
