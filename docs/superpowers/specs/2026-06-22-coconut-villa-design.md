@@ -2,7 +2,9 @@
 
 ## Context
 
-Pon Di Rio currently has two villas, Palm Villa and Bamboo Villa. Both exist as `Villa` rows in Postgres (via Prisma) but were never inserted through a committed script — booking, availability, and admin pages that read from the DB already work for any villa; only frontend pages with hardcoded villa lists, and one admin page hardcoded to a single villa ID, need updates.
+Pon Di Rio currently has two villas, Palm Villa and Bamboo Villa. Both exist as `Villa` rows in Postgres (via Prisma). `prisma/seed.ts` is a committed, idempotent (`upsert`) script, but it only seeds a villa called "Pon Di River" (slug `pon-di-river`, price 350, maxGuests 6) — an earlier placeholder that is now `isActive: false` in the live DB. Palm Villa and Bamboo Villa were inserted separately, not through this seed script; their actual field values (price 390, maxGuests 4, description `null`, isActive `true`) were confirmed by directly querying the live `Villa` table, not by reading seed.ts.
+
+Booking, availability, and admin pages that read from the DB already work for any villa; only frontend pages with hardcoded villa lists, and one admin page hardcoded to a single villa ID, need updates.
 
 We're adding a third villa, Coconut Villa, with the same pricing/amenities/layout as the existing two. No photo gallery exists yet for Coconut Villa — only one cover photo, sourced from `/Users/sheneskawilliams/Desktop/BIX/PDR/PDR-PICS/PHOTO-2026-03-16-11-27-26.jpg`.
 
@@ -34,7 +36,7 @@ description: null
 isActive: true
 ```
 
-This is a one-off insert (e.g. a temporary `tsx` script run once, then discarded), not a committed seed script — consistent with how Palm Villa and Bamboo Villa were added (no committed script exists for them either).
+This is a one-off insert (e.g. a temporary `tsx` script run once, then discarded), not an extension of `prisma/seed.ts` — consistent with how Palm Villa and Bamboo Villa were added (seed.ts seeds the unrelated, now-inactive "Pon Di River" placeholder and isn't the mechanism used for real villas).
 
 ### 2. Cover image
 
@@ -68,13 +70,14 @@ Each of these gets a third entry for Coconut Villa:
 - `app/booking/page.tsx` — fetches villa list from `/api/villas`
 - `app/admin/availability/*` — fetches villas via `getVillas()`
 - `app/admin/bookings/*` — fetches villas via `getVillas()`
+- `app/opengraph-image.tsx` — hardcodes `bamboo-villa-cover.jpg` as the site-wide OG image background. This is global branding, not a per-villa list, so it's out of scope here and intentionally left unchanged.
 
 ### 7. Admin calendar-feeds page — villa selector
 
 Currently `app/admin/calendar-feeds/page.tsx` hardcodes `VILLA_ID` to Palm Villa. Convert to support all villas, following the existing client-side filter pattern already used in `app/admin/availability/AvailabilityPageClient.tsx` (local `useState`, no URL params/routing):
 
 - `page.tsx` becomes a server component that fetches `villas = await getVillas()` and `feeds = await getCalendarFeeds()` (calling with no argument returns feeds for all villas, since `getCalendarFeeds` already supports an optional `villaId`), then renders a new client component with this data.
-- New `app/admin/calendar-feeds/CalendarFeedsClient.tsx`: holds `selectedVillaId` state (default: first villa in the fetched list), renders a `<select>` dropdown of villas, filters the already-fetched `feeds` array client-side by `villaId`, and passes `selectedVillaId` into `AddFeedForm`.
+- New `app/admin/calendar-feeds/CalendarFeedsClient.tsx`: holds `selectedVillaId` state (default: first villa in the fetched list), renders a `<select>` dropdown of villas, filters the already-fetched `feeds` array client-side by `villaId`, and passes `selectedVillaId` into `AddFeedForm`. This borrows the *local-state, client-side filtering* mechanic from `AvailabilityPageClient.tsx`, but diverges on the default value: that page defaults to an `"all"` sentinel (it's a read-only filter), whereas this page always needs one concrete villa selected because `AddFeedForm` requires a real `villaId` to submit against — so there's no `"all"` option here, just a default to the first villa.
 - `SyncButton` and `RemoveFeedButton` are unchanged (already villa-agnostic).
 
 ## Open questions
