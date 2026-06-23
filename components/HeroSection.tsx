@@ -206,6 +206,7 @@ export default function HeroSection() {
                     <option value="">All Villas</option>
                     <option value="palm-villa">Palm Villa</option>
                     <option value="bamboo-villa">Bamboo Villa</option>
+                    <option value="coconut-villa">Coconut Villa</option>
                   </select>
                 </div>
               </div>
