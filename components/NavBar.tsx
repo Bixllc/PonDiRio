@@ -93,6 +93,12 @@ export default function Navbar() {
             >
               Bamboo Villa
             </a>
+            <a
+              href="/villas/coconut-villa"
+              className="block px-6 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+            >
+              Coconut Villa
+            </a>
           </div>
         </div>
 
@@ -182,6 +188,17 @@ export default function Navbar() {
               }`}
             >
               Bamboo Villa
+            </a>
+            <a
+              href="/villas/coconut-villa"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={`py-3 text-sm tracking-wide ${
+                shouldShowScrolledStyle
+                  ? "text-gray-700 hover:text-gray-900"
+                  : "text-white/90 hover:text-white"
+              }`}
+            >
+              Coconut Villa
             </a>
             <a
               href="/contact"
