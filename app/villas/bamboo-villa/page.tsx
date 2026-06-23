@@ -212,29 +212,55 @@ export default function BambooVillaPage() {
             Check out other villas
           </h2>
 
-          <a href="/villas/palm-villa" className="group block max-w-md">
-            <div className="relative aspect-[4/5] overflow-hidden">
-              <Image
-                src="/img8.JPG"
-                alt="Palm Villa"
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-              <div className="absolute bottom-6 left-6 text-white">
-                <h3
-                  className="text-3xl md:text-4xl"
-                  style={{ fontVariant: "small-caps", fontFamily: "var(--font-serif), serif" }}
-                >
-                  Palm Villa
-                </h3>
-                <p className="mt-1 text-white/80 text-sm">$390 per night</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-12">
+            <a href="/villas/palm-villa" className="group block">
+              <div className="relative aspect-[4/5] overflow-hidden">
+                <Image
+                  src="/img8.JPG"
+                  alt="Palm Villa"
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <div className="absolute bottom-6 left-6 text-white">
+                  <h3
+                    className="text-3xl md:text-4xl"
+                    style={{ fontVariant: "small-caps", fontFamily: "var(--font-serif), serif" }}
+                  >
+                    Palm Villa
+                  </h3>
+                  <p className="mt-1 text-white/80 text-sm">$390 per night</p>
+                </div>
               </div>
-            </div>
-            <p className="mt-6 text-gray-600 text-base leading-relaxed max-w-md">
-              Palm Villa offers an intimate sanctuary where modern luxury meets tropical serenity. Floor-to-ceiling windows frame lush riverside views, while handcrafted hardwood furnishings and vaulted ceilings create an airy, sophisticated retreat.
-            </p>
-          </a>
+              <p className="mt-6 text-gray-600 text-base leading-relaxed">
+                Palm Villa offers an intimate sanctuary where modern luxury meets tropical serenity. Floor-to-ceiling windows frame lush riverside views, while handcrafted hardwood furnishings and vaulted ceilings create an airy, sophisticated retreat.
+              </p>
+            </a>
+
+            <a href="/villas/coconut-villa" className="group block">
+              <div className="relative aspect-[4/5] overflow-hidden">
+                <Image
+                  src="/coconut-villa-cover.jpg"
+                  alt="Coconut Villa"
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <div className="absolute bottom-6 left-6 text-white">
+                  <h3
+                    className="text-3xl md:text-4xl"
+                    style={{ fontVariant: "small-caps", fontFamily: "var(--font-serif), serif" }}
+                  >
+                    Coconut Villa
+                  </h3>
+                  <p className="mt-1 text-white/80 text-sm">$390 per night</p>
+                </div>
+              </div>
+              <p className="mt-6 text-gray-600 text-base leading-relaxed">
+                Coconut Villa brings together easy island living and quiet garden surroundings, just steps from the river that runs through Pon Di Rio.
+              </p>
+            </a>
+          </div>
         </div>
       </section>
 
