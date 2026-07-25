@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import { prisma } from "./prisma";
 import { BookingStatus } from "@/app/generated/prisma/client";
-import { sendBookingConfirmation } from "./email";
+import { sendBookingConfirmation, sendAdminBookingNotification } from "./email";
 
 // ISO 4217 numeric currency codes
 const CURRENCY_CODES: Record<string, string> = {
@@ -304,8 +304,32 @@ export async function verifyFacCallback(
   // Payment succeeded — confirm booking, block dates, update payment record
   await confirmBooking(bookingId, String(result.TransactionIdentifier));
 
-  // Fire-and-forget: don't let email failure block the booking response
-  sendBookingConfirmation(bookingId).catch(() => {});
+  // Await the sends: on serverless the function is frozen once the response is
+  // returned, so a fire-and-forget promise often never reaches Resend.
+  // Failures are logged but must not fail an already-paid booking.
+  const [guestEmail, adminEmail] = await Promise.all([
+    sendBookingConfirmation(bookingId).catch((err) => ({
+      success: false as const,
+      error: err instanceof Error ? err.message : "Unknown error",
+    })),
+    sendAdminBookingNotification(bookingId).catch((err) => ({
+      success: false as const,
+      error: err instanceof Error ? err.message : "Unknown error",
+    })),
+  ]);
+
+  if (!guestEmail.success) {
+    console.error(
+      `[FAC] Guest confirmation email failed for booking ${bookingId}:`,
+      guestEmail.error,
+    );
+  }
+  if (!adminEmail.success) {
+    console.error(
+      `[FAC] Admin booking notification failed for booking ${bookingId}:`,
+      adminEmail.error,
+    );
+  }
 
   return { success: true, bookingId };
 }
