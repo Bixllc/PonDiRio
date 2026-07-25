@@ -7,6 +7,7 @@ import { Calendar, Users } from "lucide-react";
 import { DayPicker } from "react-day-picker";
 import { format, eachDayOfInterval, parseISO, startOfDay } from "date-fns";
 import "react-day-picker/style.css";
+import { SHOW_COCONUT_VILLA } from "@/lib/features";
 
 const carouselImages = [
   "/carousel-01.jpg",
@@ -206,7 +207,9 @@ export default function HeroSection() {
                     <option value="">All Villas</option>
                     <option value="palm-villa">Palm Villa</option>
                     <option value="bamboo-villa">Bamboo Villa</option>
-                    <option value="coconut-villa">Coconut Villa</option>
+                    {SHOW_COCONUT_VILLA && (
+                      <option value="coconut-villa">Coconut Villa</option>
+                    )}
                   </select>
                 </div>
               </div>

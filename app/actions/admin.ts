@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
+import { HIDDEN_VILLA_SLUGS } from "@/lib/features";
 
 // ─── Bookings ─────────────────────────────────────────────
 
@@ -158,11 +159,21 @@ export async function getAvailabilityBlocks(villaId: string) {
 // ─── Villas ──────────────────────────────────────────────
 
 export async function getVillas() {
-  return prisma.villa.findMany({
-    where: { isActive: true },
+  // Villas hidden from the public site are still managed here, so include them
+  // even though they are inactive.
+  const villas = await prisma.villa.findMany({
+    where: {
+      OR: [{ isActive: true }, { slug: { in: HIDDEN_VILLA_SLUGS } }],
+    },
     select: { id: true, name: true, slug: true },
     orderBy: { name: "asc" },
   });
+
+  return villas.map((v) =>
+    HIDDEN_VILLA_SLUGS.includes(v.slug)
+      ? { ...v, name: `${v.name} (hidden)` }
+      : v,
+  );
 }
 
 // ─── Calendar Feeds ───────────────────────────────────────

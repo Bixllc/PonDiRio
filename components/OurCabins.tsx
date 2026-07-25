@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import Image from "next/image";
+import { SHOW_COCONUT_VILLA } from "@/lib/features";
 
 function VillaImageSlider({
   images,
@@ -107,18 +108,22 @@ export default function OurCabinsSection() {
       images: ["/bamboo-villa-cover.jpg"],
       alt: "Bamboo Villa at Pon Di Rio",
     },
-    {
-      id: 3,
-      slug: "coconut-villa",
-      title: "Coconut Villa",
-      price: 390,
-      minNights: 2,
-      bedrooms: 2,
-      bathrooms: 2,
-      guests: 4,
-      images: ["/coconut-villa-cover.jpg"],
-      alt: "Coconut Villa at Pon Di Rio",
-    },
+    ...(SHOW_COCONUT_VILLA
+      ? [
+          {
+            id: 3,
+            slug: "coconut-villa",
+            title: "Coconut Villa",
+            price: 390,
+            minNights: 2,
+            bedrooms: 2,
+            bathrooms: 2,
+            guests: 4,
+            images: ["/coconut-villa-cover.jpg"],
+            alt: "Coconut Villa at Pon Di Rio",
+          },
+        ]
+      : []),
   ];
 
   const [activeIndex, setActiveIndex] = useState(0);

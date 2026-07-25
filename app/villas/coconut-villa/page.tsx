@@ -1,8 +1,15 @@
 import Image from "next/image";
+import { notFound } from "next/navigation";
 import NavBar from "../../../components/NavBar";
 import Footer from "../../../components/Footer";
+import { SHOW_COCONUT_VILLA } from "@/lib/features";
 
 export default function CoconutVillaPage() {
+  // Page stays built but unreachable until the villa is ready for bookings.
+  if (!SHOW_COCONUT_VILLA) {
+    notFound();
+  }
+
   return (
     <main className="min-h-screen">
       <NavBar />

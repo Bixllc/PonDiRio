@@ -1,6 +1,7 @@
 import Image from "next/image";
 import NavBar from "../../../components/NavBar";
 import Footer from "../../../components/Footer";
+import { SHOW_COCONUT_VILLA } from "@/lib/features";
 
 export default function PalmVillaPage() {
   return (
@@ -242,29 +243,31 @@ export default function PalmVillaPage() {
               </p>
             </a>
 
-            <a href="/villas/coconut-villa" className="group block">
-              <div className="relative aspect-[4/5] overflow-hidden">
-                <Image
-                  src="/coconut-villa-cover.jpg"
-                  alt="Coconut Villa"
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                <div className="absolute bottom-6 left-6 text-white">
-                  <h3
-                    className="text-3xl md:text-4xl"
-                    style={{ fontVariant: "small-caps", fontFamily: "var(--font-serif), serif" }}
-                  >
-                    Coconut Villa
-                  </h3>
-                  <p className="mt-1 text-white/80 text-sm">$390 per night</p>
+            {SHOW_COCONUT_VILLA && (
+              <a href="/villas/coconut-villa" className="group block">
+                <div className="relative aspect-[4/5] overflow-hidden">
+                  <Image
+                    src="/coconut-villa-cover.jpg"
+                    alt="Coconut Villa"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute bottom-6 left-6 text-white">
+                    <h3
+                      className="text-3xl md:text-4xl"
+                      style={{ fontVariant: "small-caps", fontFamily: "var(--font-serif), serif" }}
+                    >
+                      Coconut Villa
+                    </h3>
+                    <p className="mt-1 text-white/80 text-sm">$390 per night</p>
+                  </div>
                 </div>
-              </div>
-              <p className="mt-6 text-gray-600 text-base leading-relaxed">
-                Coconut Villa brings together easy island living and quiet garden surroundings, just steps from the river that runs through Pon Di Rio.
-              </p>
-            </a>
+                <p className="mt-6 text-gray-600 text-base leading-relaxed">
+                  Coconut Villa brings together easy island living and quiet garden surroundings, just steps from the river that runs through Pon Di Rio.
+                </p>
+              </a>
+            )}
           </div>
         </div>
       </section>
