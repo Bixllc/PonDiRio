@@ -415,10 +415,6 @@ export type ExternalCalendarFeedUncheckedUpdateManyWithoutVillaNestedInput = {
   deleteMany?: Prisma.ExternalCalendarFeedScalarWhereInput | Prisma.ExternalCalendarFeedScalarWhereInput[]
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type ExternalCalendarFeedCreateNestedOneWithoutEventsInput = {
   create?: Prisma.XOR<Prisma.ExternalCalendarFeedCreateWithoutEventsInput, Prisma.ExternalCalendarFeedUncheckedCreateWithoutEventsInput>
   connectOrCreate?: Prisma.ExternalCalendarFeedCreateOrConnectWithoutEventsInput

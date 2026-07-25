@@ -51,6 +51,9 @@ export type BookingMinAggregateOutputType = {
   currency: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  preArrivalReminderSentAt: Date | null
+  checkInReminderSentAt: Date | null
+  checkOutReminderSentAt: Date | null
 }
 
 export type BookingMaxAggregateOutputType = {
@@ -68,6 +71,9 @@ export type BookingMaxAggregateOutputType = {
   currency: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  preArrivalReminderSentAt: Date | null
+  checkInReminderSentAt: Date | null
+  checkOutReminderSentAt: Date | null
 }
 
 export type BookingCountAggregateOutputType = {
@@ -85,6 +91,9 @@ export type BookingCountAggregateOutputType = {
   currency: number
   createdAt: number
   updatedAt: number
+  preArrivalReminderSentAt: number
+  checkInReminderSentAt: number
+  checkOutReminderSentAt: number
   _all: number
 }
 
@@ -114,6 +123,9 @@ export type BookingMinAggregateInputType = {
   currency?: true
   createdAt?: true
   updatedAt?: true
+  preArrivalReminderSentAt?: true
+  checkInReminderSentAt?: true
+  checkOutReminderSentAt?: true
 }
 
 export type BookingMaxAggregateInputType = {
@@ -131,6 +143,9 @@ export type BookingMaxAggregateInputType = {
   currency?: true
   createdAt?: true
   updatedAt?: true
+  preArrivalReminderSentAt?: true
+  checkInReminderSentAt?: true
+  checkOutReminderSentAt?: true
 }
 
 export type BookingCountAggregateInputType = {
@@ -148,6 +163,9 @@ export type BookingCountAggregateInputType = {
   currency?: true
   createdAt?: true
   updatedAt?: true
+  preArrivalReminderSentAt?: true
+  checkInReminderSentAt?: true
+  checkOutReminderSentAt?: true
   _all?: true
 }
 
@@ -252,6 +270,9 @@ export type BookingGroupByOutputType = {
   currency: string
   createdAt: Date
   updatedAt: Date
+  preArrivalReminderSentAt: Date | null
+  checkInReminderSentAt: Date | null
+  checkOutReminderSentAt: Date | null
   _count: BookingCountAggregateOutputType | null
   _avg: BookingAvgAggregateOutputType | null
   _sum: BookingSumAggregateOutputType | null
@@ -292,6 +313,9 @@ export type BookingWhereInput = {
   currency?: Prisma.StringFilter<"Booking"> | string
   createdAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
+  preArrivalReminderSentAt?: Prisma.DateTimeNullableFilter<"Booking"> | Date | string | null
+  checkInReminderSentAt?: Prisma.DateTimeNullableFilter<"Booking"> | Date | string | null
+  checkOutReminderSentAt?: Prisma.DateTimeNullableFilter<"Booking"> | Date | string | null
   villa?: Prisma.XOR<Prisma.VillaScalarRelationFilter, Prisma.VillaWhereInput>
   payments?: Prisma.PaymentListRelationFilter
   availabilityBlock?: Prisma.XOR<Prisma.AvailabilityBlockNullableScalarRelationFilter, Prisma.AvailabilityBlockWhereInput> | null
@@ -312,6 +336,9 @@ export type BookingOrderByWithRelationInput = {
   currency?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  preArrivalReminderSentAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  checkInReminderSentAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  checkOutReminderSentAt?: Prisma.SortOrderInput | Prisma.SortOrder
   villa?: Prisma.VillaOrderByWithRelationInput
   payments?: Prisma.PaymentOrderByRelationAggregateInput
   availabilityBlock?: Prisma.AvailabilityBlockOrderByWithRelationInput
@@ -335,6 +362,9 @@ export type BookingWhereUniqueInput = Prisma.AtLeast<{
   currency?: Prisma.StringFilter<"Booking"> | string
   createdAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
+  preArrivalReminderSentAt?: Prisma.DateTimeNullableFilter<"Booking"> | Date | string | null
+  checkInReminderSentAt?: Prisma.DateTimeNullableFilter<"Booking"> | Date | string | null
+  checkOutReminderSentAt?: Prisma.DateTimeNullableFilter<"Booking"> | Date | string | null
   villa?: Prisma.XOR<Prisma.VillaScalarRelationFilter, Prisma.VillaWhereInput>
   payments?: Prisma.PaymentListRelationFilter
   availabilityBlock?: Prisma.XOR<Prisma.AvailabilityBlockNullableScalarRelationFilter, Prisma.AvailabilityBlockWhereInput> | null
@@ -355,6 +385,9 @@ export type BookingOrderByWithAggregationInput = {
   currency?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  preArrivalReminderSentAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  checkInReminderSentAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  checkOutReminderSentAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.BookingCountOrderByAggregateInput
   _avg?: Prisma.BookingAvgOrderByAggregateInput
   _max?: Prisma.BookingMaxOrderByAggregateInput
@@ -380,6 +413,9 @@ export type BookingScalarWhereWithAggregatesInput = {
   currency?: Prisma.StringWithAggregatesFilter<"Booking"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Booking"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Booking"> | Date | string
+  preArrivalReminderSentAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Booking"> | Date | string | null
+  checkInReminderSentAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Booking"> | Date | string | null
+  checkOutReminderSentAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Booking"> | Date | string | null
 }
 
 export type BookingCreateInput = {
@@ -396,6 +432,9 @@ export type BookingCreateInput = {
   currency?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  preArrivalReminderSentAt?: Date | string | null
+  checkInReminderSentAt?: Date | string | null
+  checkOutReminderSentAt?: Date | string | null
   villa: Prisma.VillaCreateNestedOneWithoutBookingsInput
   payments?: Prisma.PaymentCreateNestedManyWithoutBookingInput
   availabilityBlock?: Prisma.AvailabilityBlockCreateNestedOneWithoutBookingInput
@@ -416,6 +455,9 @@ export type BookingUncheckedCreateInput = {
   currency?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  preArrivalReminderSentAt?: Date | string | null
+  checkInReminderSentAt?: Date | string | null
+  checkOutReminderSentAt?: Date | string | null
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBookingInput
   availabilityBlock?: Prisma.AvailabilityBlockUncheckedCreateNestedOneWithoutBookingInput
 }
@@ -434,6 +476,9 @@ export type BookingUpdateInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preArrivalReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkInReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkOutReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   villa?: Prisma.VillaUpdateOneRequiredWithoutBookingsNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutBookingNestedInput
   availabilityBlock?: Prisma.AvailabilityBlockUpdateOneWithoutBookingNestedInput
@@ -454,6 +499,9 @@ export type BookingUncheckedUpdateInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preArrivalReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkInReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkOutReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutBookingNestedInput
   availabilityBlock?: Prisma.AvailabilityBlockUncheckedUpdateOneWithoutBookingNestedInput
 }
@@ -473,6 +521,9 @@ export type BookingCreateManyInput = {
   currency?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  preArrivalReminderSentAt?: Date | string | null
+  checkInReminderSentAt?: Date | string | null
+  checkOutReminderSentAt?: Date | string | null
 }
 
 export type BookingUpdateManyMutationInput = {
@@ -489,6 +540,9 @@ export type BookingUpdateManyMutationInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preArrivalReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkInReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkOutReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type BookingUncheckedUpdateManyInput = {
@@ -506,6 +560,9 @@ export type BookingUncheckedUpdateManyInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preArrivalReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkInReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkOutReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type BookingListRelationFilter = {
@@ -533,6 +590,9 @@ export type BookingCountOrderByAggregateInput = {
   currency?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  preArrivalReminderSentAt?: Prisma.SortOrder
+  checkInReminderSentAt?: Prisma.SortOrder
+  checkOutReminderSentAt?: Prisma.SortOrder
 }
 
 export type BookingAvgOrderByAggregateInput = {
@@ -555,6 +615,9 @@ export type BookingMaxOrderByAggregateInput = {
   currency?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  preArrivalReminderSentAt?: Prisma.SortOrder
+  checkInReminderSentAt?: Prisma.SortOrder
+  checkOutReminderSentAt?: Prisma.SortOrder
 }
 
 export type BookingMinOrderByAggregateInput = {
@@ -572,6 +635,9 @@ export type BookingMinOrderByAggregateInput = {
   currency?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  preArrivalReminderSentAt?: Prisma.SortOrder
+  checkInReminderSentAt?: Prisma.SortOrder
+  checkOutReminderSentAt?: Prisma.SortOrder
 }
 
 export type BookingSumOrderByAggregateInput = {
@@ -635,6 +701,10 @@ export type EnumBookingStatusFieldUpdateOperationsInput = {
   set?: $Enums.BookingStatus
 }
 
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type BookingCreateNestedOneWithoutAvailabilityBlockInput = {
   create?: Prisma.XOR<Prisma.BookingCreateWithoutAvailabilityBlockInput, Prisma.BookingUncheckedCreateWithoutAvailabilityBlockInput>
   connectOrCreate?: Prisma.BookingCreateOrConnectWithoutAvailabilityBlockInput
@@ -679,6 +749,9 @@ export type BookingCreateWithoutVillaInput = {
   currency?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  preArrivalReminderSentAt?: Date | string | null
+  checkInReminderSentAt?: Date | string | null
+  checkOutReminderSentAt?: Date | string | null
   payments?: Prisma.PaymentCreateNestedManyWithoutBookingInput
   availabilityBlock?: Prisma.AvailabilityBlockCreateNestedOneWithoutBookingInput
 }
@@ -697,6 +770,9 @@ export type BookingUncheckedCreateWithoutVillaInput = {
   currency?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  preArrivalReminderSentAt?: Date | string | null
+  checkInReminderSentAt?: Date | string | null
+  checkOutReminderSentAt?: Date | string | null
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBookingInput
   availabilityBlock?: Prisma.AvailabilityBlockUncheckedCreateNestedOneWithoutBookingInput
 }
@@ -745,6 +821,9 @@ export type BookingScalarWhereInput = {
   currency?: Prisma.StringFilter<"Booking"> | string
   createdAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
+  preArrivalReminderSentAt?: Prisma.DateTimeNullableFilter<"Booking"> | Date | string | null
+  checkInReminderSentAt?: Prisma.DateTimeNullableFilter<"Booking"> | Date | string | null
+  checkOutReminderSentAt?: Prisma.DateTimeNullableFilter<"Booking"> | Date | string | null
 }
 
 export type BookingCreateWithoutAvailabilityBlockInput = {
@@ -761,6 +840,9 @@ export type BookingCreateWithoutAvailabilityBlockInput = {
   currency?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  preArrivalReminderSentAt?: Date | string | null
+  checkInReminderSentAt?: Date | string | null
+  checkOutReminderSentAt?: Date | string | null
   villa: Prisma.VillaCreateNestedOneWithoutBookingsInput
   payments?: Prisma.PaymentCreateNestedManyWithoutBookingInput
 }
@@ -780,6 +862,9 @@ export type BookingUncheckedCreateWithoutAvailabilityBlockInput = {
   currency?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  preArrivalReminderSentAt?: Date | string | null
+  checkInReminderSentAt?: Date | string | null
+  checkOutReminderSentAt?: Date | string | null
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutBookingInput
 }
 
@@ -813,6 +898,9 @@ export type BookingUpdateWithoutAvailabilityBlockInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preArrivalReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkInReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkOutReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   villa?: Prisma.VillaUpdateOneRequiredWithoutBookingsNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutBookingNestedInput
 }
@@ -832,6 +920,9 @@ export type BookingUncheckedUpdateWithoutAvailabilityBlockInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preArrivalReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkInReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkOutReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutBookingNestedInput
 }
 
@@ -849,6 +940,9 @@ export type BookingCreateWithoutPaymentsInput = {
   currency?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  preArrivalReminderSentAt?: Date | string | null
+  checkInReminderSentAt?: Date | string | null
+  checkOutReminderSentAt?: Date | string | null
   villa: Prisma.VillaCreateNestedOneWithoutBookingsInput
   availabilityBlock?: Prisma.AvailabilityBlockCreateNestedOneWithoutBookingInput
 }
@@ -868,6 +962,9 @@ export type BookingUncheckedCreateWithoutPaymentsInput = {
   currency?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  preArrivalReminderSentAt?: Date | string | null
+  checkInReminderSentAt?: Date | string | null
+  checkOutReminderSentAt?: Date | string | null
   availabilityBlock?: Prisma.AvailabilityBlockUncheckedCreateNestedOneWithoutBookingInput
 }
 
@@ -901,6 +998,9 @@ export type BookingUpdateWithoutPaymentsInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preArrivalReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkInReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkOutReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   villa?: Prisma.VillaUpdateOneRequiredWithoutBookingsNestedInput
   availabilityBlock?: Prisma.AvailabilityBlockUpdateOneWithoutBookingNestedInput
 }
@@ -920,6 +1020,9 @@ export type BookingUncheckedUpdateWithoutPaymentsInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preArrivalReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkInReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkOutReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   availabilityBlock?: Prisma.AvailabilityBlockUncheckedUpdateOneWithoutBookingNestedInput
 }
 
@@ -937,6 +1040,9 @@ export type BookingCreateManyVillaInput = {
   currency?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  preArrivalReminderSentAt?: Date | string | null
+  checkInReminderSentAt?: Date | string | null
+  checkOutReminderSentAt?: Date | string | null
 }
 
 export type BookingUpdateWithoutVillaInput = {
@@ -953,6 +1059,9 @@ export type BookingUpdateWithoutVillaInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preArrivalReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkInReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkOutReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   payments?: Prisma.PaymentUpdateManyWithoutBookingNestedInput
   availabilityBlock?: Prisma.AvailabilityBlockUpdateOneWithoutBookingNestedInput
 }
@@ -971,6 +1080,9 @@ export type BookingUncheckedUpdateWithoutVillaInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preArrivalReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkInReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkOutReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutBookingNestedInput
   availabilityBlock?: Prisma.AvailabilityBlockUncheckedUpdateOneWithoutBookingNestedInput
 }
@@ -989,6 +1101,9 @@ export type BookingUncheckedUpdateManyWithoutVillaInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preArrivalReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkInReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkOutReminderSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -1037,6 +1152,9 @@ export type BookingSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   currency?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  preArrivalReminderSentAt?: boolean
+  checkInReminderSentAt?: boolean
+  checkOutReminderSentAt?: boolean
   villa?: boolean | Prisma.VillaDefaultArgs<ExtArgs>
   payments?: boolean | Prisma.Booking$paymentsArgs<ExtArgs>
   availabilityBlock?: boolean | Prisma.Booking$availabilityBlockArgs<ExtArgs>
@@ -1058,6 +1176,9 @@ export type BookingSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   currency?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  preArrivalReminderSentAt?: boolean
+  checkInReminderSentAt?: boolean
+  checkOutReminderSentAt?: boolean
   villa?: boolean | Prisma.VillaDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["booking"]>
 
@@ -1076,6 +1197,9 @@ export type BookingSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   currency?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  preArrivalReminderSentAt?: boolean
+  checkInReminderSentAt?: boolean
+  checkOutReminderSentAt?: boolean
   villa?: boolean | Prisma.VillaDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["booking"]>
 
@@ -1094,9 +1218,12 @@ export type BookingSelectScalar = {
   currency?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  preArrivalReminderSentAt?: boolean
+  checkInReminderSentAt?: boolean
+  checkOutReminderSentAt?: boolean
 }
 
-export type BookingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "villaId" | "guestName" | "guestEmail" | "guestPhone" | "checkIn" | "checkOut" | "guestCount" | "specialRequests" | "status" | "totalAmount" | "currency" | "createdAt" | "updatedAt", ExtArgs["result"]["booking"]>
+export type BookingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "villaId" | "guestName" | "guestEmail" | "guestPhone" | "checkIn" | "checkOut" | "guestCount" | "specialRequests" | "status" | "totalAmount" | "currency" | "createdAt" | "updatedAt" | "preArrivalReminderSentAt" | "checkInReminderSentAt" | "checkOutReminderSentAt", ExtArgs["result"]["booking"]>
 export type BookingInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   villa?: boolean | Prisma.VillaDefaultArgs<ExtArgs>
   payments?: boolean | Prisma.Booking$paymentsArgs<ExtArgs>
@@ -1132,6 +1259,9 @@ export type $BookingPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     currency: string
     createdAt: Date
     updatedAt: Date
+    preArrivalReminderSentAt: Date | null
+    checkInReminderSentAt: Date | null
+    checkOutReminderSentAt: Date | null
   }, ExtArgs["result"]["booking"]>
   composites: {}
 }
@@ -1572,6 +1702,9 @@ export interface BookingFieldRefs {
   readonly currency: Prisma.FieldRef<"Booking", 'String'>
   readonly createdAt: Prisma.FieldRef<"Booking", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Booking", 'DateTime'>
+  readonly preArrivalReminderSentAt: Prisma.FieldRef<"Booking", 'DateTime'>
+  readonly checkInReminderSentAt: Prisma.FieldRef<"Booking", 'DateTime'>
+  readonly checkOutReminderSentAt: Prisma.FieldRef<"Booking", 'DateTime'>
 }
     
 

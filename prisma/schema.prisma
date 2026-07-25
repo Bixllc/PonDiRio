@@ -73,6 +73,10 @@ model Booking {
   createdAt       DateTime      @default(now()) @map("created_at")
   updatedAt       DateTime      @updatedAt @map("updated_at")
 
+  preArrivalReminderSentAt DateTime? @map("pre_arrival_reminder_sent_at")
+  checkInReminderSentAt    DateTime? @map("check_in_reminder_sent_at")
+  checkOutReminderSentAt   DateTime? @map("check_out_reminder_sent_at")
+
   villa              Villa              @relation(fields: [villaId], references: [id])
   payments           Payment[]
   availabilityBlock  AvailabilityBlock?

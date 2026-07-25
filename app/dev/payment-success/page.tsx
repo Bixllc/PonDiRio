@@ -55,11 +55,11 @@ export default async function DevPaymentSuccessPage({
           </div>
           <div className="flex justify-between">
             <dt className="text-gray-500">Check-in</dt>
-            <dd className="text-gray-900">{new Date(booking.checkIn).toLocaleDateString()}</dd>
+            <dd className="text-gray-900">{new Date(booking.checkIn).toLocaleDateString("en-US", { timeZone: "UTC" })}</dd>
           </div>
           <div className="flex justify-between">
             <dt className="text-gray-500">Check-out</dt>
-            <dd className="text-gray-900">{new Date(booking.checkOut).toLocaleDateString()}</dd>
+            <dd className="text-gray-900">{new Date(booking.checkOut).toLocaleDateString("en-US", { timeZone: "UTC" })}</dd>
           </div>
           <div className="flex justify-between border-t pt-3">
             <dt className="font-medium text-gray-900">Total</dt>
