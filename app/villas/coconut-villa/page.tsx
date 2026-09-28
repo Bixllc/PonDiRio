@@ -146,7 +146,7 @@ export default function CoconutVillaPage() {
         </div>
       </section>
 
-      {/* Gallery Section — coming soon placeholder (no gallery photos yet) */}
+      {/* Gallery Section */}
       <section className="bg-[#f5f0eb] py-20 md:py-28">
         <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
           <h2
@@ -156,15 +156,35 @@ export default function CoconutVillaPage() {
             Gallery
           </h2>
 
-          <div className="relative aspect-[16/9] overflow-hidden">
-            <Image src="/coconut-villa-cover.jpg" alt="Coconut Villa" fill className="object-cover" />
-            <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-              <p
-                className="text-white text-2xl md:text-3xl tracking-wide"
-                style={{ fontVariant: "small-caps", fontFamily: "var(--font-serif), serif" }}
-              >
-                Photo gallery coming soon
-              </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Row 1: tall left, two stacked right */}
+            <div className="relative md:row-span-2 overflow-hidden h-full min-h-[500px]">
+              <Image src="/coconut-2.jpg" alt="Bathroom with Walk-in Shower" fill className="object-cover" />
+            </div>
+            <div className="relative aspect-[4/3] overflow-hidden">
+              <Image src="/coconut-1.jpg" alt="Main Bedroom" fill className="object-cover" />
+            </div>
+            <div className="relative aspect-[4/3] overflow-hidden">
+              <Image src="/coconut-3.jpg" alt="Living Room" fill className="object-cover" />
+            </div>
+
+            {/* Row 2: two side by side */}
+            <div className="relative aspect-[4/3] overflow-hidden">
+              <Image src="/coconut-4.jpg" alt="Bedroom" fill className="object-cover" />
+            </div>
+            <div className="relative aspect-[4/3] overflow-hidden">
+              <Image src="/coconut-5.jpg" alt="Bedroom with Desk" fill className="object-cover" />
+            </div>
+
+            {/* Row 3: two stacked left, tall right */}
+            <div className="relative aspect-[4/3] overflow-hidden">
+              <Image src="/coconut-6.jpg" alt="Second Bedroom" fill className="object-cover" />
+            </div>
+            <div className="relative md:row-span-2 overflow-hidden h-full min-h-[500px]">
+              <Image src="/coconut-7.jpg" alt="Outdoor Shower" fill className="object-cover" />
+            </div>
+            <div className="relative aspect-[4/3] overflow-hidden">
+              <Image src="/coconut-8.jpg" alt="Bathroom" fill className="object-cover" />
             </div>
           </div>
         </div>
@@ -173,7 +193,7 @@ export default function CoconutVillaPage() {
       {/* CTA Section */}
       <section className="relative py-28 md:py-36">
         <Image
-          src="/coconut-villa-cover.jpg"
+          src="/coconut-3.jpg"
           alt=""
           fill
           className="object-cover"
